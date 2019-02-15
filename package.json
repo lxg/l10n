@@ -1,12 +1,8 @@
 {
-  "name": "lxgac/l10n",
-  "version": "0.1",
+  "name": "@aguensche/l10n",
+  "version": "1.0.0",
   "description": "A lightweight translation library",
-  "main": "l10n.mjs",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/lxg/l10n.git"
-  },
+  "main": "l10n.js",
   "keywords": [
     "internationalisation",
     "i18n",
@@ -17,9 +13,10 @@
     "localize",
     "gettext"
   ],
-  "author": {
-    "name": "Alexander Günsche",
-    "email": "github@lxg.de"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lxg/l10n.git"
   },
+  "author": "",
   "license": "MIT"
 }
