@@ -79,7 +79,9 @@ l10n.x("item count" "Amount");
 // language. For example, many languages have more than two plural forms, and this
 // function will select the correct one.
 //
-// NOTE: This function will not fill in the value into the placeholder in the plural form, but only return the correct message. See below for a simple sprintf() implementation to do the substitution for you.
+// NOTE: This function will not fill in the value into the placeholder in the
+// plural form, but only return the correct message. See below for a simple
+// sprintf() implementation to do the substitution for you.
 l10n.n("One apple", "%s apples", 4);
 ```
 
