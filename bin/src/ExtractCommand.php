@@ -9,7 +9,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\HttpKernel\Config\FileLocator;
 use Symfony\Component\Console\Application;
 
 class ExtractCommand extends Command
@@ -18,11 +17,28 @@ class ExtractCommand extends Command
 
     const TRANSLATIONS_DIR = "l10n";
 
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
+     * @var string
+     */
+    private $workdir;
+
     private $extractorOptions = ['functions' => [
         't' => 'gettext',
         'x' => 'pgettext',
         'n' => 'ngettext'
     ]];
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->filesystem = new Filesystem();
+        $this->workdir = getcwd();
+    }
 
     protected function configure()
     {
@@ -35,70 +51,80 @@ class ExtractCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $cwd = getcwd();
-        $filesystem = new Filesystem();
-        $locales = $input->getOption('locale');
+        $locales = $input->getOption('locale') ?: $this->getLocalesFromPackage();
+        $files = $this->getSourceFiles();
 
-        if (!$locales)
+        foreach ($locales as $locale)
         {
-            $packageJsonFile = __DIR__ . "/../../package.json";
+            $catalogFile = sprintf("%s/%s/%s.po", $this->workdir, static::TRANSLATIONS_DIR, $locale);
+            $catalog = $this->createCatalog($locale, $catalogFile, $files);
+            $this->filesystem->dumpFile($catalogFile, $catalog->toPoString());
+        }
+    }
 
-            if ($filesystem->exists($packageJsonFile))
-            {
-                $packageJson = json_decode(file_get_contents($packageJsonFile), true);
+    private function getLocalesFromPackage() : array
+    {
+        $packageJsonFile = __DIR__ . "/../../package.json";
 
-                if (isset($packageJson["l10n"]) && isset($packageJson["l10n"]["locales"]) && is_array($packageJson["l10n"]["locales"]))
-                    $locales = $packageJson["l10n"]["locales"];
-            }
+        if ($this->filesystem->exists($packageJsonFile))
+        {
+            $packageJson = json_decode(file_get_contents($packageJsonFile), true);
+
+            if (isset($packageJson["l10n"]) && isset($packageJson["l10n"]["locales"]) && is_array($packageJson["l10n"]["locales"]))
+                $locales = $packageJson["l10n"]["locales"];
         }
 
         if (!$locales)
             throw new Exception("At least one locale must be given!");
 
-        $finder = (new Finder())->in($cwd)
+        return $locales;
+    }
+
+    private function getSourceFiles() : array
+    {
+        $files = [];
+        $finder = (new Finder())->in($this->workdir)
             ->name("*\.js")
             ->name("*\.mjs")
             ->notPath('|' . static::TRANSLATIONS_DIR . '/|')
             ->notPath('|node_modules|');
 
-        $files = [];
-
         foreach ($finder as $file)
         {
             $filePath = $file->getRealpath();
-            $alias = str_replace("$cwd/", "", $filePath);
+            $alias = str_replace("{$this->workdir}/", "", $filePath);
             $files[$filePath] = $alias;
         }
 
-        $frontendCatalogs = [];
-
-        foreach ($locales as $locale)
-        {
-            if (! preg_match('|^[a-z]{2}-[A-Z]{2}|', $locale))
-            {
-                throw new Exception("Invalid locale: $locale");
-            }
-
-            $catalogFile = sprintf("$cwd/%s/$locale.po", static::TRANSLATIONS_DIR);
-            $oldCatalog = ($filesystem->exists($catalogFile))
-                ? $this->deleteReferences(Translations::fromPoFile($catalogFile))
-                : new Translations();
-
-            $catalog = new Translations();
-            $catalog->deleteHeaders();
-            $catalog->setLanguage(str_replace("-", "_", $locale));
-
-            foreach ($files as $file)
-            {
-                $catalog->addFromJsCodeFile($file, $this->extractorOptions);
-            }
-
-            $catalog->mergeWith($oldCatalog, 0);
-            $filesystem->dumpFile($catalogFile, $catalog->toPoString());
-        }
+        return $files;
     }
 
-    private function deleteReferences(Translations $translations)
+    private function createCatalog(string $locale, string $catalogFile, array $files) : Translations
+    {
+        if (! preg_match('|^[a-z]{2}-[A-Z]{2}|', $locale))
+        {
+            throw new Exception("Invalid locale: $locale");
+        }
+
+        $oldCatalog = ($this->filesystem->exists($catalogFile))
+            ? $this->deleteReferences(Translations::fromPoFile($catalogFile))
+            : new Translations();
+
+        $catalog = new Translations();
+        $catalog->deleteHeaders();
+        $catalog->setLanguage(str_replace("-", "_", $locale));
+
+        foreach ($files as $file)
+        {
+            $catalog->addFromJsCodeFile($file, $this->extractorOptions);
+        }
+
+        $catalog->mergeWith($oldCatalog, 0);
+
+        return $catalog;
+    }
+
+    private function deleteReferences(Translations $translations) : Translations
     {
         foreach ($translations as $translation)
         {
