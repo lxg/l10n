@@ -135,6 +135,22 @@ bin/catalog extract --locale de-DE --locale fr-FR
 
 The above command will create or update the catalogs for German and French. Catalogs reside in the `./l10n` directory. So after running the command for the first time, you will find the new files `./l10n/de-DE.po` and `./l10n/fr-FR.po` in your project. Don’t forget to put them under version control.
 
+Of course, you can also specify the target languages in your `package.json` file. Simply add the `l10n` key and add a `locales` entry with an array of your locales, for example:
+
+```json
+{
+  "l10n" : {
+      "locales" : ["de-DE", "fr-FR"]
+  }
+}
+```
+
+After that, you can run the `catalog extract` command without parameter:
+
+```bash
+bin/catalog extract
+```
+
 ### Creating the translations table
 
 **TODO**

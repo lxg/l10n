@@ -40,6 +40,19 @@ class ExtractCommand extends Command
         $locales = $input->getOption('locale');
 
         if (!$locales)
+        {
+            $packageJsonFile = __DIR__ . "/../../package.json";
+
+            if ($filesystem->exists($packageJsonFile))
+            {
+                $packageJson = json_decode(file_get_contents($packageJsonFile), true);
+
+                if (isset($packageJson["l10n"]) && isset($packageJson["l10n"]["locales"]) && is_array($packageJson["l10n"]["locales"]))
+                    $locales = $packageJson["l10n"]["locales"];
+            }
+        }
+
+        if (!$locales)
             throw new Exception("At least one locale must be given!");
 
         $finder = (new Finder())->in($cwd)
