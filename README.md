@@ -2,7 +2,7 @@
 
 This library is a lightweight implementation of the Gettext internationalisation tools. It is written in pure ES6, does not have any dependencies and is written with Web Components in mind.
 
-The Gettext system have some nice advantages: It has great pluralisation support, it can handle message contexts, and by using the original message as catalog ID, you always have an (English) fallback, even if a given translation doesn’t exist. What’s also great is that the `.po` catalog format has very widespread industry support, so you will always find translators, tools and even auto-translate services which can work with your catalog files without knowlegde of this library or even programming at all.
+The Gettext system has some nice advantages: It has great pluralisation support, it can handle message contexts, and by using the original message as catalog ID, you always have an (English) fallback, even if a given translation doesn’t exist. What’s also great is that the `.po` catalog format has very widespread industry support, so you will always find translators, tools and even auto-translate services which can work with your catalog files without knowlegde of this library or even programming at all.
 
 Why do we need yet another JS Gettext implementation, aren’t there enough already? Here’s why:
 
@@ -18,11 +18,11 @@ Why do we need yet another JS Gettext implementation, aren’t there enough alre
 
 ## Usage
 
-The simplest way to use this tool is to add the `l10n.js` to your project and `import` it:
-
 ### Importing the library
 
 #### Pure JS
+
+The simplest way to use this tool is to add the `l10n.js` to your project and `import` it:
 
 ```js
 import l10n from "./l10n.js";
@@ -106,6 +106,47 @@ sprintf(l10n.t("Hello %s!"), "John Doe");
 // once to sprintf()
 sprintf(l10n.n("One apple", "%s apples", 4), 4);
 ```
+
+### Switching the locale
+
+The locale can be switched by calling the `setLocale` function. This means you can implement your own language switcher and let it trigger the locale switching. Here’s an example of a very simple switcher component:
+
+```js
+class LocaleSwitcher extends HTMLElement
+{
+    constructor()
+    {
+        super();
+        this.shadow = this.attachShadow({ mode: 'open' });
+    }
+
+    connectedCallback()
+    {
+        this.shadow.innerHTML = `
+            <style>
+            span { cursor : pointer }
+            </style>
+            <span data-locale="de-DE">🇩🇪</span>
+            <span data-locale="en-US">🇬🇧</span>
+        `;
+
+        this.shadowRoot.querySelectorAll("span").forEach(elem => elem.addEventListener(
+            "click",
+            () => l10n.setLocale(elem.getAttribute("data-locale"))
+        ));
+    }
+}
+
+customElements.define('locale-switcher', LocaleSwitcher);
+```
+
+After `setLocale` has switched the locale internally, it will trigger the `l10n.locale.switch` event on the `document` element. Therefore, you can add an event listener in your element’s constructor and re-create the element.
+
+```js
+document.addEventListener("l10n.locale.switch", () => this.connectedCallback());
+```
+
+> ATTENTION: If you have multiple nested elements, you should only trigger re-rendering on the topmost element.
 
 ## The catalog manager
 
