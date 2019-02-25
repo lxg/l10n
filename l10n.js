@@ -12,7 +12,7 @@ l10n.n = (msgid, msgidPlural, amount) => {
     return  (entry && entry[0] && entry[1]) ? entry[getPluralMessageIdx(amount)] : (amount === 1 ? msgid : msgidPlural);
 };
 
-l10n.setLocale = (loc) => {
+l10n.setLocale = (loc, _init) => {
     try {
         let locales = Intl.getCanonicalLocales(loc);
         locale = locales[0];
@@ -21,11 +21,13 @@ l10n.setLocale = (loc) => {
     // as Intl.getCanonicalLocales can throw an error or return an empty array, we put a fallback here
     locale = locale || "en-US";
     language = locale.substr(0, 2);
+
+    _init || document.dispatchEvent(new CustomEvent("l10n.locale.switch", { detail : { locale } }));
 };
 
 let locale, language;
 
-l10n.setLocale(navigator.language);
+l10n.setLocale(navigator.language, true);
 
 let catalogs = {};
 let pluralCallbacks = {};
