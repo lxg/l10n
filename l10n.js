@@ -9,7 +9,7 @@ l10n.x = (context, msgid) => getEntry(context + "\u0004" + msgid) || msgid;
 
 l10n.n = (msgid, msgidPlural, amount) => {
     const entry = getEntry(msgid);
-    return  sprintf((entry && entry[0] && entry[1]) ? entry[getPluralMessageIdx(amount)] : (amount === 1 ? msgid : msgidPlural), amount);
+    return  (entry && entry[0] && entry[1]) ? entry[getPluralMessageIdx(amount)] : (amount === 1 ? msgid : msgidPlural);
 };
 
 l10n.setLocale = (loc) => {
@@ -27,7 +27,6 @@ let locale, language;
 
 l10n.setLocale(navigator.language);
 
-
 let catalogs = {};
 let pluralCallbacks = {};
 let getEntry = msgid => catalogs[locale] ? catalogs[locale][msgid] : undefined;
@@ -40,12 +39,7 @@ let getPluralMessageIdx = amount => {
     return pluralCallbacks[language](amount);
 };
 
-let sprintf = (format, ...args) => {
-    let i = 0;
-    return format.replace(/%s/g, () => args[i++]);
-};
-
-// Gettext pluralisation rules for most languages
+// Gettext pluralisation rules for many languages
 let plurals = {
     _default:"n!=1",
     ak:"n>1",
