@@ -154,7 +154,7 @@ document.addEventListener("l10n.locale.switch", () => this.connectedCallback());
 
 l10n comes with a *catalog manager* which is a CLI tool and has two tasks: It extracts all translatable strings into a `.po` catalog, and it builds translation tables which you can deliver as ES6 modules to the browser.
 
-The catalog manager needs PHP >= 7.1 and [Composer](https://getcomposer.org/) it your development environment. Why do we use PHP in a JavaScript module? Because of the great [Gettext implementation](https://github.com/oscarotero/Gettext) which provides very powerful tools for managing translations. I wasn’t able to find something similar written in JavaScript, so for now we will be using PHP.
+The catalog manager needs PHP >= 7.1 and [Composer](https://getcomposer.org/) it your development environment. Why do we use PHP in a JavaScript module? Because of the outstanding [Gettext library by Oscar Otero](https://github.com/oscarotero/Gettext) which provides very powerful tools for managing translations. I wasn’t able to find something similar written in JavaScript, so for now we will be using PHP.
 
 ### Installing the catalog manager
 
@@ -188,7 +188,7 @@ Of course, you can also specify the target languages in your `package.json` file
 }
 ```
 
-After that, you can run the `catalog extract` command without parameter:
+After that, you can run the extractor without parameter:
 
 ```bash
 bin/catalog extract
