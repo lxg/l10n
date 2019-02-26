@@ -96,8 +96,6 @@ let sprintf = (format, ...args) => {
 };
 ```
 
-This is of course just a very basic example. You may want to use a more sophisticated implementation of `sprintf` (e.g. with support for positional parameters) in your project.
-
 Use it like this:
 
 ```js
@@ -108,6 +106,8 @@ sprintf(l10n.t("Hello %s!"), "John Doe");
 // once to sprintf()
 sprintf(l10n.n("One apple", "%s apples", 4), 4);
 ```
+
+This is of course just a very basic example. You may want to use a more sophisticated implementation of `sprintf` (e.g. with support for positional parameters) in your project.
 
 ### Switching the locale
 
