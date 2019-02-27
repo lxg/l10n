@@ -1,3 +1,5 @@
+// public
+
 export default function l10n(loc, translations) {
     catalogs[loc] = catalogs[loc] || {};
     Object.keys(translations).forEach(msgid => catalogs[loc][msgid] = translations[msgid]);
@@ -24,6 +26,11 @@ l10n.setLocale = (loc, _init) => {
 
     _init || document.dispatchEvent(new CustomEvent("l10n.locale.switch", { detail : { locale } }));
 };
+
+document.addEventListener("l10n.locale.set", ev => l10n.setLocale(ev.detail.locale));
+
+
+// private
 
 let locale, language;
 
