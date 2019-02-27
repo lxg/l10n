@@ -1,5 +1,5 @@
 {
-  "name": "@aguensche/l10n",
+  "name": "@tuicom/l10n",
   "version": "1.2.1",
   "description": "A lightweight translation library",
   "main": "l10n.js",
@@ -15,8 +15,8 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lxg/l10n.git"
+    "url": "git+https://github.com/tuicom/l10n.git"
   },
   "author": "Alexander Günsche",
-  "license": "MIT"
+  "license": "ISC"
 }
