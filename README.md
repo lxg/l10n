@@ -146,6 +146,40 @@ document.addEventListener("l10n.locale.switch", () => this.connectedCallback());
 
 > ATTENTION: If you have multiple nested elements, you should only trigger re-rendering on the topmost element.
 
+### Date formatting
+
+If you’re working with dates, you will face two additional problems:
+
+1. You want the structure of the date expression to match the locale (e.g. `Y-m-d` in English and `d.m.Y` in German),
+2. You want month and weekday names to be translated *within* such an expression.
+
+This is solved by the `date.js` module. Consider the following example, especially how the functions are arranged to produce the desired output:
+
+```js
+import l10n from "./l10n.js";
+import date from "./date.js";
+
+// English: Today is April 23, 2019.
+// German: Heute ist der 23. April 2019.
+sprintf(l10n.t("Today is %s."), date.fmt(new Date(2019, 3, 23), l10n.t("F j, Y")))
+```
+
+The `date.js` module also provides a few functions to get translated month/weekday names:
+
+```js
+// Returns a list of month names in the current locale: "January", "February", …
+date.getMonths();
+
+// Returns a list of short month names in the current locale: "Jan", "Feb", …
+date.getMonthsShort();
+
+// Returns a list of weekday names in the current locale: "Monday", "Tuesday", …
+date.getWeekdays();
+
+// Returns a list of short weekday names in the current locale: "Mon", "Tue", …
+date.getWeekdaysShort();
+```
+
 ## The catalog manager
 
 l10n comes with a *catalog manager* which is a CLI tool and has two tasks: It extracts all translatable strings into a `.po` catalog, and it builds translation tables which you can deliver as ES6 modules to the browser.
