@@ -116,25 +116,21 @@ The locale can be switched by calling the `setLocale` function. This means you c
 ```js
 class LocaleSwitcher extends HTMLElement
 {
-    constructor()
-    {
-        super();
-        this.shadow = this.attachShadow({ mode: 'open' });
-    }
-
     connectedCallback()
     {
-        this.shadow.innerHTML = `
+        this.innerHTML = `
             <style>
-            span { cursor : pointer }
+            span { cursor : pointer; }
             </style>
-            <span data-locale="de-DE">🇩🇪</span>
-            <span data-locale="en-US">🇬🇧</span>
+            <span data-locale="de-DE">🇩🇪</span> <span data-locale="en-US">🇬🇧</span>
         `;
 
-        this.shadowRoot.querySelectorAll("span").forEach(elem => elem.addEventListener(
+        this.querySelectorAll("span").forEach(elem => elem.addEventListener(
             "click",
-            () => l10n.setLocale(elem.getAttribute("data-locale"))
+            () => document.dispatchEvent(new CustomEvent(
+                "l10n.locale.set",
+                { detail : { locale : elem.getAttribute("data-locale") } }
+            ))
         ));
     }
 }
