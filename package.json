@@ -17,6 +17,9 @@
     "type": "git",
     "url": "git+https://github.com/tuicom/l10n.git"
   },
-  "author": "Alexander Günsche",
+  "author": "TUI Deutschland GmbH",
+  "contributors": [
+      { "name": "Alexander Günsche", "email": "alexander.guensche@tui.com" }
+  ],
   "license": "ISC"
 }
