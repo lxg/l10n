@@ -14,7 +14,7 @@ release-major:
 
 publish:
 	git push --tags origin HEAD:master
-	npm publish
+	npm publish --access public
 
 define release
 	npm version $(1) -m 'release v%s'
