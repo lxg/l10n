@@ -15,13 +15,7 @@ l10n.n = (msgid, msgidPlural, amount) => {
 };
 
 l10n.setLocale = (loc, _init) => {
-    try {
-        let locales = Intl.getCanonicalLocales(loc);
-        locale = locales[0];
-    } catch (e) { }
-
-    // as Intl.getCanonicalLocales can throw an error or return an empty array, we put a fallback here
-    locale = locale || "en-US";
+    locale = loc;
     language = locale.substr(0, 2);
 
     _init || document.dispatchEvent(new CustomEvent("l10n.locale.switch", { detail : { locale } }));
