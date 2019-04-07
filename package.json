@@ -24,5 +24,8 @@
       "email": "alexander.guensche@tui.de"
     }
   ],
+   "bin": {
+      "catalog": "./bin/catalog"
+   },
   "license": "ISC"
 }
