@@ -24,7 +24,6 @@ class ExtractCommand extends AbstractCatalogCommand
         $this
             ->setName('extract')
             ->setDescription('Extract translatable strings into a translation table (.po format).')
-            ->addOption("locale", "l", InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, "set one or more locales to maintain by using the -l/--locale option")
         ;
     }
 
@@ -32,7 +31,7 @@ class ExtractCommand extends AbstractCatalogCommand
     {
         $files = $this->getSourceFiles();
 
-        foreach ($this->getLocalesFromPackage() as $locale)
+        foreach ($this->getLocales() as $locale)
         {
             if ($locale !== static::DEFAULT_LOCALE)
             {
@@ -41,14 +40,6 @@ class ExtractCommand extends AbstractCatalogCommand
                 $this->filesystem->dumpFile($catalogFile, $catalog->toPoString());
             }
         }
-    }
-
-    private function getLocalesFromPackage() : array
-    {
-        $packageJson = $this->getPackageJson();
-        $locales = (isset($packageJson["l10n"]) && isset($packageJson["l10n"]["locales"]) && is_array($packageJson["l10n"]["locales"]))
-            ? $packageJson["l10n"]["locales"]
-            : [];
     }
 
     private function getSourceFiles() : array

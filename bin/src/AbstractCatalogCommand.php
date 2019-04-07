@@ -45,4 +45,13 @@ abstract class AbstractCatalogCommand extends Command
 
         return json_decode(file_get_contents($packageJsonFile), true);
     }
+
+    protected function getLocales() : array
+    {
+        $packageJson = $this->getPackageJson();
+
+        return (isset($packageJson["l10n"]) && isset($packageJson["l10n"]["locales"]) && is_array($packageJson["l10n"]["locales"]))
+            ? $packageJson["l10n"]["locales"]
+            : [];
+    }
 }
