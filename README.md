@@ -39,13 +39,13 @@ Note that your own script must be loaded as a module (`type="module"`) for this 
 This package is also available via NPM:
 
 ```bash
-npm install --save @aguensche/l10n
+npm install --save @tuicom/l10n
 ```
 
 Depending on how you manage your dependencies, you must use a different path for importing. For example, with recent versions of ParcelJS, using the built-in development server, the following should work:
 
 ```
-import l10n from "node_modules/@aguensche/l10n/l10n.js";
+import l10n from "node_modules/@tuicom/l10n/l10n.js";
 ```
 
 ### Translating strings
