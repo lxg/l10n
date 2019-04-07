@@ -33,11 +33,11 @@ class ExtractCommand extends Command
         'n' => 'ngettext'
     ]];
 
-    public function __construct()
+    public function __construct($workdir)
     {
         parent::__construct();
         $this->filesystem = new Filesystem();
-        $this->workdir = getcwd();
+        $this->workdir = $workdir;
     }
 
     protected function configure()
@@ -56,15 +56,19 @@ class ExtractCommand extends Command
 
         foreach ($locales as $locale)
         {
-            $catalogFile = sprintf("%s/%s/%s.po", $this->workdir, static::TRANSLATIONS_DIR, $locale);
-            $catalog = $this->createCatalog($locale, $catalogFile, $files);
-            $this->filesystem->dumpFile($catalogFile, $catalog->toPoString());
+            if ($locale !== static::DEFAULT_LOCALE)
+            {
+                $catalogFile = sprintf("%s/%s/%s.po", $this->workdir, static::TRANSLATIONS_DIR, $locale);
+                $catalog = $this->createCatalog($locale, $catalogFile, $files);
+                $this->filesystem->dumpFile($catalogFile, $catalog->toPoString());
+            }
         }
     }
 
     private function getLocalesFromPackage() : array
     {
-        $packageJsonFile = __DIR__ . "/../../package.json";
+        $packageJsonFile = "{$this->workdir}/package.json";
+        $locales = null;
 
         if ($this->filesystem->exists($packageJsonFile))
         {
