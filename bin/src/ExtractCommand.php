@@ -11,34 +11,13 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Console\Application;
 
-class ExtractCommand extends Command
+class ExtractCommand extends AbstractCatalogCommand
 {
-    const DEFAULT_LOCALE = "en-US";
-
-    const TRANSLATIONS_DIR = "l10n";
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
-     * @var string
-     */
-    private $workdir;
-
     private $extractorOptions = ['functions' => [
         't' => 'gettext',
         'x' => 'pgettext',
         'n' => 'ngettext'
     ]];
-
-    public function __construct($workdir)
-    {
-        parent::__construct();
-        $this->filesystem = new Filesystem();
-        $this->workdir = $workdir;
-    }
 
     protected function configure()
     {
@@ -67,16 +46,11 @@ class ExtractCommand extends Command
 
     private function getLocalesFromPackage() : array
     {
-        $packageJsonFile = "{$this->workdir}/package.json";
+        $packageJson = $this->getPackageJson();
         $locales = null;
 
-        if ($this->filesystem->exists($packageJsonFile))
-        {
-            $packageJson = json_decode(file_get_contents($packageJsonFile), true);
-
-            if (isset($packageJson["l10n"]) && isset($packageJson["l10n"]["locales"]) && is_array($packageJson["l10n"]["locales"]))
-                $locales = $packageJson["l10n"]["locales"];
-        }
+        if (isset($packageJson["l10n"]) && isset($packageJson["l10n"]["locales"]) && is_array($packageJson["l10n"]["locales"]))
+            $locales = $packageJson["l10n"]["locales"];
 
         if (!$locales)
             throw new Exception("At least one locale must be given!");

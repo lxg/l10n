@@ -2,6 +2,7 @@
 <?php
 
 require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/src/AbstractCatalogCommand.php';
 require_once __DIR__ . '/src/ExtractCommand.php';
 
 # This may look a bit more complicated that necessary, but this way we’ll work well with symlinks
