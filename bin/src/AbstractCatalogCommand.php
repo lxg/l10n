@@ -27,6 +27,11 @@ abstract class AbstractCatalogCommand extends Command
      */
     protected $workdir;
 
+    /**
+     * @var array
+     */
+    protected $packageJson;
+
     public function __construct($workdir)
     {
         parent::__construct();
@@ -36,14 +41,19 @@ abstract class AbstractCatalogCommand extends Command
 
     protected function getPackageJson()
     {
-        $packageJsonFile = "{$this->workdir}/package.json";
-
-        if (!$this->filesystem->exists($packageJsonFile))
+        if (is_null($this->packageJson))
         {
-            throw new Exception("The package.json file was expected at $packageJsonFile but not found.");
+            $packageJsonFile = "{$this->workdir}/package.json";
+
+            if (!$this->filesystem->exists($packageJsonFile))
+            {
+                throw new Exception("The package.json file was expected at $packageJsonFile but not found.");
+            }
+
+            $this->packageJson = (array)json_decode(file_get_contents($packageJsonFile), true);
         }
 
-        return json_decode(file_get_contents($packageJsonFile), true);
+        return $this->packageJson;
     }
 
     protected function getLocales() : array
