@@ -30,10 +30,9 @@ class ExtractCommand extends AbstractCatalogCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $locales = $input->getOption('locale') ?: $this->getLocalesFromPackage();
         $files = $this->getSourceFiles();
 
-        foreach ($locales as $locale)
+        foreach ($this->getLocalesFromPackage() as $locale)
         {
             if ($locale !== static::DEFAULT_LOCALE)
             {
@@ -47,15 +46,9 @@ class ExtractCommand extends AbstractCatalogCommand
     private function getLocalesFromPackage() : array
     {
         $packageJson = $this->getPackageJson();
-        $locales = null;
-
-        if (isset($packageJson["l10n"]) && isset($packageJson["l10n"]["locales"]) && is_array($packageJson["l10n"]["locales"]))
-            $locales = $packageJson["l10n"]["locales"];
-
-        if (!$locales)
-            throw new Exception("At least one locale must be given!");
-
-        return $locales;
+        $locales = (isset($packageJson["l10n"]) && isset($packageJson["l10n"]["locales"]) && is_array($packageJson["l10n"]["locales"]))
+            ? $packageJson["l10n"]["locales"]
+            : [];
     }
 
     private function getSourceFiles() : array

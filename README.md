@@ -200,15 +200,9 @@ Now you can use the `bin/catalog` tool which is the CLI frontend to the catalog 
 
 ### Extracting messages
 
-Extracting messages works with the `bin/catalog extract` command. It will go through all your JavaScript files, find occurences of our Gettext functions and add them to one catalog per locale. The great thing is that it will keep existing translations, so you can simply run it as often as you want.
+Extracting messages works with the `bin/catalog extract` command. It will go through all your JavaScript files, find occurences of our Gettext functions and add them to one catalog per locale.
 
-```bash
-bin/catalog extract --locale de-DE --locale fr-FR
-```
-
-The above command will create or update the catalogs for German and French. Catalogs reside in the `./l10n` directory. So after running the command for the first time, you will find the new files `./l10n/de-DE.po` and `./l10n/fr-FR.po` in your project. Don’t forget to put them under version control.
-
-Of course, you can also specify the target languages in your `package.json` file. Simply add the `l10n` key and add a `locales` entry with an array of your locales, for example:
+But first, you must specify the target languages in your `package.json` file. Simply add the `l10n` key and add a `locales` entry with an array of your locales, for example:
 
 ```json
 {
@@ -218,14 +212,23 @@ Of course, you can also specify the target languages in your `package.json` file
 }
 ```
 
-After that, you can run the extractor without parameter:
+> NOTE: The `en-US` locale is used as the default locale, this Gettext standard behaviour. This means that adding the `en-US` locale to the `locales` list will be ignored.
+
+Now you can run
 
 ```bash
 bin/catalog extract
 ```
+
+Assuming you have `"locales" : ["de-DE", "fr-FR"]`, the above command will create or update the catalogs for German and French. Catalogs reside in the `./l10n` directory. So after running the command for the first time, you will find the new files `./l10n/de-DE.po` and `./l10n/fr-FR.po` in your project. Don’t forget to put them under version control.
 
 ### Creating the translations table
 
 **TODO**
 
 *The implementation is not ready yet, therefore documentation has to wait, too. :)*
+
+
+### A note on version control
+
+**TODO**
