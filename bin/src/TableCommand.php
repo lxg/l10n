@@ -92,8 +92,6 @@ class TableCommand extends AbstractCatalogCommand
                     // we will now merge this catalog with the entire catalog of the respective package to get the intersection.
                     $fileCatalog = $this->createCatalog($locale, [$file]);
                     $fileCatalog->mergeWith($packageCatalog, 0);
-
-
                     $catalogs[$locale]->mergeWith($fileCatalog, Merge::ADD);
                 }
             }
@@ -106,8 +104,11 @@ class TableCommand extends AbstractCatalogCommand
     {
         $files = [];
 
+        /**
+         * @var Finder
+         */
         $finder = (new Finder())->in($this->workdir)
-            ->name($source);
+            ->path($source);
 
         foreach ($finder as $file)
         {
