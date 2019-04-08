@@ -196,11 +196,11 @@ composer install
 
 (NOTE: We assume that Composer is installed globally and without the `.phar` extension, e.g. as `/usr/bin/composer`. Depending on your installation, you may need to adapt the path.)
 
-Now you can use the `bin/catalog` tool which is the CLI frontend to the catalog manager.
+Now you can use the `node_modules/.bin/catalog` tool which is the CLI frontend to the catalog manager.
 
 ### Extracting messages
 
-Extracting messages works with the `bin/catalog extract` command. It will go through all your JavaScript files, find occurences of our Gettext functions and add them to one catalog per locale.
+Extracting messages works with the `node_modules/.bin/catalog extract` command. It will go through all your JavaScript files, find occurences of our Gettext functions and add them to one catalog per locale.
 
 But first, you must specify the target languages in your `package.json` file. Simply add the `l10n` key and add a `locales` entry with an array of your locales, for example:
 
@@ -212,22 +212,49 @@ But first, you must specify the target languages in your `package.json` file. Si
 }
 ```
 
-> NOTE: The `en-US` locale is used as the default locale, this Gettext standard behaviour. This means that adding the `en-US` locale to the `locales` list will be ignored.
+> NOTE: The `en-US` locale is used as the default locale. This means that adding the `en-US` locale to the `locales` list will be ignored.
 
 Now you can run
 
 ```bash
-bin/catalog extract
+node_modules/.bin/catalog extract
 ```
 
 Assuming you have `"locales" : ["de-DE", "fr-FR"]`, the above command will create or update the catalogs for German and French. Catalogs reside in the `./l10n` directory. So after running the command for the first time, you will find the new files `./l10n/de-DE.po` and `./l10n/fr-FR.po` in your project. Don’t forget to put them under version control.
 
 ### Creating the translations table
 
-**TODO**
+The `node_modules/.bin/catalog table` command will create one or more translations files which you can use in your application. In your `package.json` file, add a `tables` key to the `l10n` entry. The `tables` key contains a map of a target file name and a list of source files. The source file entries may contain globbing patterns.
 
-*The implementation is not ready yet, therefore documentation has to wait, too. :)*
+```json
+{
+    "l10n": {
+        "tables": {
+            "translations.js": [
+                "main.js",
+                "other.js",
+                "node_modules/@foo/bar/*.js"
+            ]
+        }
+    }
+}
+```
 
+Now you can run the `node_modules/.bin/catalog table` command, and it will create a custom translations file. This file can be embedded in your application as a module:
+
+```HTML
+<script type="module" src="/translations.js" async></script>
+```
+
+#### How it works internally
+
+The `node_modules/.bin/catalog table` command tries to find the translation catalogs of the packages to which each file belongs.
+
+- First, it resolves all glob patterns and creates a list of files for which you want to add translations.
+- For each file, it traverses the directory tree until it finds a `package.json` file, and will look for a `l10n` directory where it expects to find the `.po` files.
+- If it finds `.po` files, it will create a small “template” PO catalog and merge the package’s translations into this file, so that it contains only the translations for this file.
+- At the end, all translations of all files for a given locale are merged into one large locale-specific catalog.
+- Finally, it will create the translation target file(s) with all translations for the files referenced there.
 
 ### A note on version control
 
