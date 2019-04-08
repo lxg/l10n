@@ -23,7 +23,7 @@ class ExtractCommand extends AbstractCatalogCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $files = $this->getSourceFiles();
+        $files = array_flip($this->getSourceFiles());
 
         foreach ($this->getLocales() as $locale)
         {

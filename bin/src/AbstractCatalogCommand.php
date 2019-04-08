@@ -103,7 +103,6 @@ abstract class AbstractCatalogCommand extends Command
         $catalog->deleteHeaders();
         $catalog->setLanguage(str_replace("-", "_", $locale));
 
-
         if ($files)
         {
             foreach ($files as $file)
