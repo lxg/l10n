@@ -13,12 +13,6 @@ use Symfony\Component\Console\Application;
 
 class ExtractCommand extends AbstractCatalogCommand
 {
-    private $extractorOptions = ['functions' => [
-        't' => 'gettext',
-        'x' => 'pgettext',
-        'n' => 'ngettext'
-    ]];
-
     protected function configure()
     {
         $this
@@ -36,7 +30,7 @@ class ExtractCommand extends AbstractCatalogCommand
             if ($locale !== static::DEFAULT_LOCALE)
             {
                 $catalogFile = sprintf("%s/%s/%s.po", $this->workdir, static::TRANSLATIONS_DIR, $locale);
-                $catalog = $this->createCatalog($locale, $catalogFile, $files);
+                $catalog = $this->fillCatalog($locale, $catalogFile, $files);
                 $this->filesystem->dumpFile($catalogFile, $catalog->toPoString());
             }
         }
@@ -61,25 +55,13 @@ class ExtractCommand extends AbstractCatalogCommand
         return $files;
     }
 
-    private function createCatalog(string $locale, string $catalogFile, array $files) : Translations
+    private function fillCatalog(string $locale, string $catalogFile, array $files) : Translations
     {
-        if (! preg_match('|^[a-z]{2}-[A-Z]{2}|', $locale))
-        {
-            throw new Exception("Invalid locale: $locale");
-        }
+        $catalog = $this->createCatalog($locale, $files);
 
         $oldCatalog = ($this->filesystem->exists($catalogFile))
             ? $this->deleteReferences(Translations::fromPoFile($catalogFile))
             : new Translations();
-
-        $catalog = new Translations();
-        $catalog->deleteHeaders();
-        $catalog->setLanguage(str_replace("-", "_", $locale));
-
-        foreach ($files as $file)
-        {
-            $catalog->addFromJsCodeFile($file, $this->extractorOptions);
-        }
 
         $catalog->mergeWith($oldCatalog, 0);
 
