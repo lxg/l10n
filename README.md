@@ -45,7 +45,7 @@ npm install --save @tuicom/l10n
 Depending on how you manage your dependencies, you must use a different path for importing. For example, with recent versions of ParcelJS, using the built-in development server, the following should work:
 
 ```
-import l10n from "node_modules/@tuicom/l10n/l10n.js";
+import l10n from "./node_modules/@tuicom/l10n/l10n.js";
 ```
 
 ### Translating strings
@@ -182,21 +182,11 @@ date.getWeekdaysShort();
 
 ## The catalog manager
 
-l10n comes with a *catalog manager* which is a CLI tool and has two tasks: It extracts all translatable strings into a `.po` catalog, and it builds translation tables which you can deliver as ES6 modules to the browser.
+l10n comes with a *catalog manager* which is a CLI tool and has two tasks: It extracts all translatable strings into a `.po` catalog, and it builds translation tables which you can deliver as JavaScript to the browser.
 
-The catalog manager needs PHP >= 7.1 and [Composer](https://getcomposer.org/) it your development environment. Why do we use PHP in a JavaScript module? Because of the outstanding [Gettext library by Oscar Otero](https://github.com/oscarotero/Gettext) which provides very powerful tools for managing translations. I wasn’t able to find something similar written in JavaScript, so for now we will be using PHP.
+The catalog manager needs PHP >= 7.1 in your development environment. Why do we use PHP in a JavaScript module? Because of the outstanding [Gettext library by Oscar Otero](https://github.com/oscarotero/Gettext) which provides very powerful tools for managing translations. I wasn’t able to find something similar written in JavaScript, so for now we will be using PHP.
 
-### Installing the catalog manager
-
-If you haven’t already, install PHP and [Composer](https://getcomposer.org/). Then install the dependencies for the catalog manager.
-
-```bash
-composer install
-```
-
-(NOTE: We assume that Composer is installed globally and without the `.phar` extension, e.g. as `/usr/bin/composer`. Depending on your installation, you may need to adapt the path.)
-
-Now you can use the `node_modules/.bin/catalog` tool which is the CLI frontend to the catalog manager.
+The `node_modules/.bin/catalog` tool is the CLI frontend to the catalog manager.
 
 ### Extracting messages
 
@@ -224,7 +214,7 @@ Assuming you have `"locales" : ["de-DE", "fr-FR"]`, the above command will creat
 
 ### Creating the translations table
 
-The `node_modules/.bin/catalog table` command will create one or more translations files which you can use in your application. In your `package.json` file, add a `tables` key to the `l10n` entry. The `tables` key contains a map of a target file name and a list of source files. The source file entries may contain globbing patterns.
+After translating the `*.po` files, the `node_modules/.bin/catalog table` command will create one or more JavaScript files which you can use in your application. In your `package.json` file, add a `tables` key to the `l10n` entry. The `tables` key contains a map of a target file name and a list of source files. Each entry can either be a verbatim file name or a regular expression (PCRE).
 
 ```json
 {
@@ -233,7 +223,7 @@ The `node_modules/.bin/catalog table` command will create one or more translatio
             "translations.js": [
                 "main.js",
                 "other.js",
-                "node_modules/@foo/bar/*.js"
+                "|node_modules/@foo/bar/.*|"
             ]
         }
     }
@@ -255,7 +245,3 @@ The `node_modules/.bin/catalog table` command tries to find the translation cata
 - If it finds `.po` files, it will create a small “template” PO catalog and merge the package’s translations into this file, so that it contains only the translations for this file.
 - At the end, all translations of all files for a given locale are merged into one large locale-specific catalog.
 - Finally, it will create the translation target file(s) with all translations for the files referenced there.
-
-### A note on version control
-
-**TODO**
