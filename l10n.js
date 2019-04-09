@@ -29,6 +29,7 @@ document.addEventListener("l10n.locale.set", ev => l10n.setLocale(ev.detail.loca
 let locale, language;
 
 l10n.setLocale(navigator.language, true);
+l10n.getLocale = () => locale;
 
 let catalogs = {};
 let pluralCallbacks = {};
