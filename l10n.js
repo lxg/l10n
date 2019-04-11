@@ -18,7 +18,8 @@ l10n.setLocale = (loc, _init) => {
     locale = loc;
     language = locale.substr(0, 2);
 
-    _init || document.dispatchEvent(new CustomEvent("l10n.locale.switch", { detail : { locale } }));
+    // disabled for now, because it doesn't work in ES5
+    // _init || document.dispatchEvent(new CustomEvent("l10n.locale.switch", { detail : { locale } }));
 };
 
 document.addEventListener("l10n.locale.set", ev => l10n.setLocale(ev.detail.locale));
