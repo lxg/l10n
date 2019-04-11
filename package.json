@@ -3,6 +3,9 @@
   "version": "1.5.0",
   "description": "A lightweight translation library",
   "main": "l10n.js",
+  "scripts": {
+      "prepublish" : "for script in $(ls *.js); do node_modules/.bin/parcel build --no-cache $script; done"
+  },
   "keywords": [
     "internationalisation",
     "i18n",
@@ -27,5 +30,8 @@
   "bin": {
     "catalog": "./bin/catalog"
   },
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "parcel": "^1.12.3"
+  }
 }
