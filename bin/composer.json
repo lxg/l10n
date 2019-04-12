@@ -14,12 +14,5 @@
             "name": "Alexander Günsche",
             "homepage": "https://lxg.de/"
         }
-    ],
-    "config": {
-        "vendor-dir" : "bin/vendor"
-    },
-    "scripts" : {
-        "post-update-cmd" : "chmod +x bin/catalog"
-    }
-
+    ]
 }
