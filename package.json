@@ -4,7 +4,7 @@
   "description": "A lightweight translation library",
   "main": "l10n.js",
   "scripts": {
-    "prepublish": "for script in $(ls *.js); do node_modules/.bin/parcel build --no-cache $script; done"
+    "build": "for script in $(ls *.js); do node_modules/.bin/parcel build --no-cache $script; done"
   },
   "keywords": [
     "internationalisation",
