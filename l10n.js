@@ -1,8 +1,10 @@
 // public
 
-export default function l10n(loc, translations) {
-    catalogs[loc] = catalogs[loc] || {};
-    Object.keys(translations).forEach(msgid => catalogs[loc][msgid] = translations[msgid]);
+export default function l10n(translations) {
+    Object.keys(translations).forEach(loc => {
+        catalogs[loc] = catalogs[loc] || {};
+        Object.keys(translations[loc]).forEach(msgid => catalogs[loc][msgid] = translations[loc][msgid]);
+    })
 };
 
 l10n.t = msgid => getEntry(msgid) || msgid;

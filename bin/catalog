@@ -4,7 +4,7 @@
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/src/AbstractCatalogCommand.php';
 require_once __DIR__ . '/src/ExtractCommand.php';
-require_once __DIR__ . '/src/TableCommand.php';
+require_once __DIR__ . '/src/TablesCommand.php';
 
 # This may look a bit more complicated than necessary, but this way we’ll work well with symlinks
 $repoPath = realpath(dirname(getcwd() . "/" . $argv[0]) . "/../..");
@@ -13,5 +13,5 @@ use Symfony\Component\Console\Application;
 
 $application = new Application("Catalog Manager");
 $application->add(new ExtractCommand($repoPath));
-$application->add(new TableCommand($repoPath));
+$application->add(new TablesCommand($repoPath));
 $application->run();

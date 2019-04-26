@@ -12,13 +12,13 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Console\Application;
 
-class TableCommand extends AbstractCatalogCommand
+class TablesCommand extends AbstractCatalogCommand
 {
     protected function configure()
     {
         $this
-            ->setName('table')
-            ->setDescription('Creates a translations table for a set of files as specified in the package.json.')
+            ->setName('tables')
+            ->setDescription('Creates translation tables for sets of source files as specified in the package.json.')
         ;
     }
 
@@ -49,17 +49,10 @@ class TableCommand extends AbstractCatalogCommand
                 }
             }
 
-            $fileContent = "import l10n from '@tuicom/l10n/l10n.js'";
-
-            foreach ($tables as $locale => $table)
-            {
-                if (count($table))
-                    $fileContent .= "\n\nl10n('$locale', " .
-                        json_encode($table, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) .
-                        ");";
-            }
-
-            $this->filesystem->dumpFile("$this->workdir/$targetFile", "$fileContent\n");
+            $this->filesystem->dumpFile(
+                "$this->workdir/$targetFile",
+                json_encode($tables, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
+            );
         }
     }
 

@@ -1,31 +1,48 @@
 # l10n – a lightweight gettext implementation in pure ES6
 
-This library is a lightweight implementation of the Gettext internationalisation tools. It is written in pure ES6, does not have any dependencies and is written with Web Components in mind.
+This library is a lightweight implementation of the [Gettext internationalisation tools](https://en.wikipedia.org/wiki/Gettext). It is written in pure ES6, does not have any dependencies and is written with Web Components in mind.
 
-The Gettext system has some nice advantages: It has great pluralisation support, it can handle message contexts, and by using the original message as catalog ID, you always have an (English) fallback, even if a given translation doesn’t exist. What’s also great is that the `.po` catalog format has very widespread industry support, so you will always find translators, tools and even auto-translate services which can work with your catalog files without knowlegde of this library or even programming at all.
+The [Gettext system](https://www.gnu.org/software/gettext/) has some nice advantages: It has great pluralisation support, it can handle message contexts, and by using the original message as catalog ID, you always have an (English) fallback, even if a given translation doesn’t exist. What’s also great is that the `.po` catalog format has very widespread industry support, so you will always find translators, tools and even auto-translate services which can work with your catalog files without knowlegde of this library or even programming at all.
 
-Why do we need yet another JS Gettext implementation, aren’t there enough already? Here’s why:
+Why do we need yet another JS Gettext implementation, aren’t there enough already? Mostly, because this one provides an *extractor* to collect all translatable strings from your code base and merges them with existing translations.
+
+It also has a few additional advantages:
 
 - Super small footprint: only 1.3 kB compressed/minified
 - No dependencies
 - Pure ES6: No RequireJS/CommonJS/AMD overhead
 - Large variety of pluralisation rules, especially where `n != 1` doesn’t work
 - Context-aware translations
-- Extractor harvests all translatable strings into one .po file per language
 - Support for automated translation services
 - On-the-fly locale switching
-- Automatically uses the user agent’s preferred language
+- Uses the user agent’s preferred language by default
 
 ## Usage
 
 ### Importing the library
 
-#### Pure JS
+#### NPM
 
-The simplest way to use this tool is to add the `l10n.js` to your project and `import` it:
+This package is available via NPM:
+
+```shell
+npm install --save @tuicom/l10n
+```
+
+Then you can import the file in your project:
 
 ```js
-import l10n from "./l10n.js";
+import l10n from "@tuicom/l10n/l10n"
+```
+
+NOTE: Your bundler must support the ES6 `import` syntax.
+
+#### Pure JS
+
+You can also simply copy the `l10n.js` file to your project and `import` it:
+
+```js
+import l10n from "./l10n.js"
 ```
 
 Note that your own script must be loaded as a module (`type="module"`) for this to work:
@@ -34,21 +51,24 @@ Note that your own script must be loaded as a module (`type="module"`) for this 
 <script src="your-script.js" type="module"></script>
 ```
 
-#### NPM
-
-This package is also available via NPM:
-
-```bash
-npm install --save @tuicom/l10n
-```
-
-Depending on how you manage your dependencies, you must use a different path for importing. For example, with recent versions of ParcelJS, using the built-in development server, the following should work:
-
-```
-import l10n from "./node_modules/@tuicom/l10n/l10n.js";
-```
-
 ### Translating strings
+
+Each user interface string that should be available in different languages, must be run trough a translation function. Consider the following example:
+
+```js
+console.log(l10n.t("Hello World!"))
+
+// the output will be "Hallo Welt!", if …
+// - if the locale is set to de-DE,
+// - a translation exists in the translation table,
+// - and the translation was imported.
+```
+
+The following also works:
+
+```js
+console.log(`=== ${l10n.t("Template strings are awesome!")} ===`)
+```
 
 There are three translation functions you can use in your code:
 
@@ -111,42 +131,87 @@ This is of course just a very basic example. You may want to use a more sophisti
 
 ### Switching the locale
 
-The locale can be switched by calling the `setLocale` function. This means you can implement your own language switcher and let it trigger the locale switching. Here’s an example of a very simple switcher component:
+The locale can be set by calling the `setLocale` function. Note that this must happen before any of the translation functions is called first.
+
+## Extracting message strings and generating translation tables
+
+The *catalog manager* is a CLI tool and has two tasks:
+
+1. It extracts all translatable strings into a `.po` catalog.
+2. It builds translation tables as a lightweight JSON objects.
+
+The catalog manager needs PHP >= 7.1 in your development environment. Why do we use PHP in a JavaScript module? Because of the great [Gettext library by Oscar Otero](https://github.com/oscarotero/Gettext) which provides very powerful tools for managing translations. We weren’t able to find something similar written in JavaScript, so for now we will be using PHP.
+
+The `node_modules/.bin/catalog` tool is the CLI frontend to the catalog manager.
+
+### Extracting message strings
+
+First, we need to go through our code and find all translatable strings, i.e. the ones we’ve wrapped in our `l10n.t`, `l10n.n` and `l10n.x` functions.
+
+Luckily, we have a tool for this, but first, we must specify the desired target languages in your `package.json` file. Simply add the `l10n` key and add a `locales` entry with an array of your locales, for example:
+
+```json
+{
+  "l10n" : {
+      "locales" : ["de-DE", "fr-FR"]
+  }
+}
+```
+
+> NOTE: The `en-US` locale is used as the default locale. This means that adding the `en-US` locale to the `locales` list will be ignored.
+
+Now the `extract` subcommand will go through all your JavaScript files, find all occurences of our translation functions and add them to one catalog per locale.
 
 ```js
-class LocaleSwitcher extends HTMLElement
-{
-    connectedCallback()
-    {
-        this.innerHTML = `
-            <style>
-            span { cursor : pointer; }
-            </style>
-            <span data-locale="de-DE">🇩🇪</span> <span data-locale="en-US">🇬🇧</span>
-        `;
+node_modules/.bin/catalog extract
+```
 
-        this.querySelectorAll("span").forEach(elem => elem.addEventListener(
-            "click",
-            () => document.dispatchEvent(new CustomEvent(
-                "l10n.locale.set",
-                { detail : { locale : elem.getAttribute("data-locale") } }
-            ))
-        ));
+Assuming you have `"locales" : ["de-DE", "fr-FR"]`, the above command will create or update the catalogs for German and French. Catalogs reside in the `./l10n` directory. So after running the command for the first time, you will find the new files `./l10n/de-DE.po` and `./l10n/fr-FR.po` in your project. Don’t forget to put them under version control.
+
+The `*.po` files can be given to a human translator or be run through a translation tool which supports this format (hint: there are a lot of them). After the `.po` files have been updated, we can create the JSON translation tables from them.
+
+### Creating translations tables
+
+In order to use the translations in your code, you must transform the `.po` files into JSON, which is done by the `tables` subcommand.
+
+So, again we start with some configuration. In your `package.json` file, add a `tables` key to the `l10n` entry. The `tables` key contains an object, where each entry is a target file for the JSON table mapped to a list of source files. Each item in this list can either be a verbatim file name or a regular expression (PCRE). Each JSON file will contain the translations for *all* languages for all strings in the referenced source files. For example:
+
+```json
+{
+    "l10n": {
+        "tables": {
+            "l10n/translations.json": [
+                "main.js",
+                "other.js",
+                "|src/.*|"
+            ]
+        }
     }
 }
-
-customElements.define('locale-switcher', LocaleSwitcher);
 ```
 
-After `setLocale` has switched the locale internally, it will trigger the `l10n.locale.switch` event on the `document` element. Therefore, you can add an event listener in your element’s constructor and re-create the element.
+Now run the following command to create the `l10n/translations.json` file:
 
 ```js
-document.addEventListener("l10n.locale.switch", () => this.connectedCallback());
+node_modules/.bin/catalog tables
 ```
 
-> ATTENTION: If you have multiple nested elements, you should only trigger re-rendering on the topmost element.
+NOTE: In the above example, we have only one JSON target file. But you could have *multiple* JSON tables per project as well. Why is that? Because you may want to create multiple subsets of translations, e.g. when parts of your application are lazy-loaded.
 
-### Date formatting
+### Using translations
+
+To make the translations available in your code, you must import the JSON from the `l10n/translations.json` file and pass it to the `l10n` function. At the top of your main JavaScript file, add the following:
+
+```js
+import translations from "./l10n/translations.json";
+l10n(translations)
+```
+
+NOTE: It is sufficient to load each JSON file only once, even if other JavaScript files need translations, too.
+
+Don’t forget to set the correct locale in order to see translated messages.
+
+## The `date.js` tool
 
 If you’re working with dates, you will face two additional problems:
 
@@ -156,8 +221,8 @@ If you’re working with dates, you will face two additional problems:
 This is solved by the `date.js` module. Consider the following example, especially how the functions are arranged to produce the desired output:
 
 ```js
-import l10n from "./l10n.js";
-import date from "./date.js";
+import l10n from "@tuicom/l10n/l10n"
+import date from "@tuicom/l10n/date"
 
 // English: Today is April 23, 2019.
 // German: Heute ist der 23. April 2019.
@@ -179,69 +244,3 @@ date.getWeekdays();
 // Returns a list of short weekday names in the current locale: "Mon", "Tue", …
 date.getWeekdaysShort();
 ```
-
-## The catalog manager
-
-l10n comes with a *catalog manager* which is a CLI tool and has two tasks: It extracts all translatable strings into a `.po` catalog, and it builds translation tables which you can deliver as JavaScript to the browser.
-
-The catalog manager needs PHP >= 7.1 in your development environment. Why do we use PHP in a JavaScript module? Because of the outstanding [Gettext library by Oscar Otero](https://github.com/oscarotero/Gettext) which provides very powerful tools for managing translations. I wasn’t able to find something similar written in JavaScript, so for now we will be using PHP.
-
-The `node_modules/.bin/catalog` tool is the CLI frontend to the catalog manager.
-
-### Extracting messages
-
-Extracting messages works with the `node_modules/.bin/catalog extract` command. It will go through all your JavaScript files, find occurences of our Gettext functions and add them to one catalog per locale.
-
-But first, you must specify the target languages in your `package.json` file. Simply add the `l10n` key and add a `locales` entry with an array of your locales, for example:
-
-```json
-{
-  "l10n" : {
-      "locales" : ["de-DE", "fr-FR"]
-  }
-}
-```
-
-> NOTE: The `en-US` locale is used as the default locale. This means that adding the `en-US` locale to the `locales` list will be ignored.
-
-Now you can run
-
-```bash
-node_modules/.bin/catalog extract
-```
-
-Assuming you have `"locales" : ["de-DE", "fr-FR"]`, the above command will create or update the catalogs for German and French. Catalogs reside in the `./l10n` directory. So after running the command for the first time, you will find the new files `./l10n/de-DE.po` and `./l10n/fr-FR.po` in your project. Don’t forget to put them under version control.
-
-### Creating the translations table
-
-After translating the `*.po` files, the `node_modules/.bin/catalog table` command will create one or more JavaScript files which you can use in your application. In your `package.json` file, add a `tables` key to the `l10n` entry. The `tables` key contains a map of a target file name and a list of source files. Each entry can either be a verbatim file name or a regular expression (PCRE).
-
-```json
-{
-    "l10n": {
-        "tables": {
-            "translations.js": [
-                "main.js",
-                "other.js",
-                "|node_modules/@foo/bar/.*|"
-            ]
-        }
-    }
-}
-```
-
-Now you can run the `node_modules/.bin/catalog table` command, and it will create a custom translations file. This file can be embedded in your application as a module:
-
-```HTML
-<script type="module" src="/translations.js" async></script>
-```
-
-#### How it works internally
-
-The `node_modules/.bin/catalog table` command tries to find the translation catalogs of the packages to which each file belongs.
-
-- First, it resolves all glob patterns and creates a list of files for which you want to add translations.
-- For each file, it traverses the directory tree until it finds a `package.json` file, and will look for a `l10n` directory where it expects to find the `.po` files.
-- If it finds `.po` files, it will create a small “template” PO catalog and merge the package’s translations into this file, so that it contains only the translations for this file.
-- At the end, all translations of all files for a given locale are merged into one large locale-specific catalog.
-- Finally, it will create the translation target file(s) with all translations for the files referenced there.
