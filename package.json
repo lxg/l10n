@@ -1,6 +1,6 @@
 {
   "name": "@tuicom/l10n",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "A lightweight translation library",
   "main": "l10n.js",
   "scripts": {
