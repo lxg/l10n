@@ -43,11 +43,11 @@ abstract class AbstractCatalogCommand extends Command
      */
     protected $locales;
 
-    public function __construct($workdir)
+    public function __construct()
     {
         parent::__construct();
+        $this->workdir = getcwd();
         $this->filesystem = new Filesystem();
-        $this->workdir = $workdir;
     }
 
     protected function getPackageJson()
