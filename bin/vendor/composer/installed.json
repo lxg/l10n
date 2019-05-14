@@ -127,18 +127,82 @@
         ]
     },
     {
-        "name": "symfony/console",
-        "version": "v4.2.5",
-        "version_normalized": "4.2.5.0",
+        "name": "opis/json-schema",
+        "version": "1.0.17",
+        "version_normalized": "1.0.17.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/symfony/console.git",
-            "reference": "24206aff3efe6962593297e57ef697ebb220e384"
+            "url": "https://github.com/opis/json-schema.git",
+            "reference": "6e2782df93bc2b581639a583793e341529c56111"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/console/zipball/24206aff3efe6962593297e57ef697ebb220e384",
-            "reference": "24206aff3efe6962593297e57ef697ebb220e384",
+            "url": "https://api.github.com/repos/opis/json-schema/zipball/6e2782df93bc2b581639a583793e341529c56111",
+            "reference": "6e2782df93bc2b581639a583793e341529c56111",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=7.0"
+        },
+        "require-dev": {
+            "ext-bcmath": "*",
+            "ext-intl": "*",
+            "ext-mbstring": "*",
+            "opis/string": "^1.4",
+            "phpunit/phpunit": "^6.5"
+        },
+        "suggest": {
+            "opis/string": "A standalone library for manipulating multibyte strings"
+        },
+        "time": "2019-05-10T19:07:20+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Opis\\JsonSchema\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Apache-2.0"
+        ],
+        "authors": [
+            {
+                "name": "Marius Sarca",
+                "email": "marius.sarca@gmail.com"
+            },
+            {
+                "name": "Sorin Sarca",
+                "email": "sarca_sorin@hotmail.com"
+            }
+        ],
+        "description": "Json Schema Validator",
+        "homepage": "http://www.opis.io/json-schema",
+        "keywords": [
+            "json",
+            "schema",
+            "validation",
+            "validator"
+        ]
+    },
+    {
+        "name": "symfony/console",
+        "version": "v4.2.8",
+        "version_normalized": "4.2.8.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/console.git",
+            "reference": "e2840bb38bddad7a0feaf85931e38fdcffdb2f81"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/console/zipball/e2840bb38bddad7a0feaf85931e38fdcffdb2f81",
+            "reference": "e2840bb38bddad7a0feaf85931e38fdcffdb2f81",
             "shasum": ""
         },
         "require": {
@@ -167,7 +231,7 @@
             "symfony/lock": "",
             "symfony/process": ""
         },
-        "time": "2019-04-01T07:32:59+00:00",
+        "time": "2019-04-08T14:23:48+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -202,17 +266,17 @@
     },
     {
         "name": "symfony/contracts",
-        "version": "v1.0.2",
-        "version_normalized": "1.0.2.0",
+        "version": "v1.1.0",
+        "version_normalized": "1.1.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/contracts.git",
-            "reference": "1aa7ab2429c3d594dd70689604b5cf7421254cdf"
+            "reference": "d3636025e8253c6144358ec0a62773cae588395b"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/contracts/zipball/1aa7ab2429c3d594dd70689604b5cf7421254cdf",
-            "reference": "1aa7ab2429c3d594dd70689604b5cf7421254cdf",
+            "url": "https://api.github.com/repos/symfony/contracts/zipball/d3636025e8253c6144358ec0a62773cae588395b",
+            "reference": "d3636025e8253c6144358ec0a62773cae588395b",
             "shasum": ""
         },
         "require": {
@@ -220,20 +284,23 @@
         },
         "require-dev": {
             "psr/cache": "^1.0",
-            "psr/container": "^1.0"
+            "psr/container": "^1.0",
+            "symfony/polyfill-intl-idn": "^1.10"
         },
         "suggest": {
             "psr/cache": "When using the Cache contracts",
             "psr/container": "When using the Service contracts",
             "symfony/cache-contracts-implementation": "",
+            "symfony/event-dispatcher-implementation": "",
+            "symfony/http-client-contracts-implementation": "",
             "symfony/service-contracts-implementation": "",
             "symfony/translation-contracts-implementation": ""
         },
-        "time": "2018-12-05T08:06:11+00:00",
+        "time": "2019-04-27T14:29:50+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "1.0-dev"
+                "dev-master": "1.1-dev"
             }
         },
         "installation-source": "dist",
@@ -272,8 +339,8 @@
     },
     {
         "name": "symfony/filesystem",
-        "version": "v4.2.5",
-        "version_normalized": "4.2.5.0",
+        "version": "v4.2.8",
+        "version_normalized": "4.2.8.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/filesystem.git",
@@ -324,23 +391,23 @@
     },
     {
         "name": "symfony/finder",
-        "version": "v4.2.5",
-        "version_normalized": "4.2.5.0",
+        "version": "v4.2.8",
+        "version_normalized": "4.2.8.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/finder.git",
-            "reference": "267b7002c1b70ea80db0833c3afe05f0fbde580a"
+            "reference": "e45135658bd6c14b61850bf131c4f09a55133f69"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/finder/zipball/267b7002c1b70ea80db0833c3afe05f0fbde580a",
-            "reference": "267b7002c1b70ea80db0833c3afe05f0fbde580a",
+            "url": "https://api.github.com/repos/symfony/finder/zipball/e45135658bd6c14b61850bf131c4f09a55133f69",
+            "reference": "e45135658bd6c14b61850bf131c4f09a55133f69",
             "shasum": ""
         },
         "require": {
             "php": "^7.1.3"
         },
-        "time": "2019-02-23T15:42:05+00:00",
+        "time": "2019-04-06T13:51:08+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
