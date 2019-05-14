@@ -28,7 +28,7 @@
     }
   ],
   "bin": {
-    "catalog": "./bin/catalog"
+    "l10n": "./bin/l10n"
   },
   "license": "ISC",
   "devDependencies": {

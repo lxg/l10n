@@ -142,7 +142,7 @@ The *catalog manager* is a CLI tool and has two tasks:
 
 The catalog manager needs PHP >= 7.1 in your development environment. Why do we use PHP in a JavaScript module? Because of the great [Gettext library by Oscar Otero](https://github.com/oscarotero/Gettext) which provides very powerful tools for managing translations. We weren’t able to find something similar written in JavaScript, so for now we will be using PHP.
 
-The `node_modules/.bin/catalog` tool is the CLI frontend to the catalog manager.
+The `node_modules/.bin/l10n` tool is the CLI frontend to the catalog manager.
 
 ### Extracting message strings
 
@@ -163,7 +163,7 @@ Luckily, we have a tool for this, but first, we must specify the desired target 
 Now the `extract` subcommand will go through all your JavaScript files, find all occurences of our translation functions and add them to one catalog per locale.
 
 ```js
-node_modules/.bin/catalog extract
+node_modules/.bin/l10n extract
 ```
 
 Assuming you have `"locales" : ["de-DE", "fr-FR"]`, the above command will create or update the catalogs for German and French. Catalogs reside in the `./l10n` directory. So after running the command for the first time, you will find the new files `./l10n/de-DE.po` and `./l10n/fr-FR.po` in your project. Don’t forget to put them under version control.
@@ -193,7 +193,7 @@ So, again we start with some configuration. In your `package.json` file, add a `
 Now run the following command to create the `l10n/translations.json` file:
 
 ```js
-node_modules/.bin/catalog tables
+node_modules/.bin/l10n tables
 ```
 
 NOTE: In the above example, we have only one JSON target file. But you could have *multiple* JSON tables per project as well. Why is that? Because you may want to create multiple subsets of translations, e.g. when parts of your application are lazy-loaded.
