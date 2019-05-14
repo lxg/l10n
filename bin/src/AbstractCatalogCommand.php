@@ -15,8 +15,6 @@ abstract class AbstractCatalogCommand extends Command
 {
     const DEFAULT_LOCALE = "en-US";
 
-    const TRANSLATIONS_DIR = "l10n";
-
     private $extractorOptions = ['functions' => [
         't' => 'gettext',
         'x' => 'pgettext',
@@ -27,6 +25,11 @@ abstract class AbstractCatalogCommand extends Command
      * @var Filesystem
      */
     protected $filesystem;
+
+    /**
+     * @var string
+     */
+    protected $translationsDir;
 
     /**
      * @var string
@@ -48,6 +51,7 @@ abstract class AbstractCatalogCommand extends Command
         parent::__construct();
         $this->workdir = getcwd();
         $this->filesystem = new Filesystem();
+        $this->translationsDir = $this->getPackageJsonKey("directory");
     }
 
     protected function getPackageJson()
@@ -72,7 +76,7 @@ abstract class AbstractCatalogCommand extends Command
         $packageJson = $this->getPackageJson();
 
         if (!isset($packageJson["l10n"]) || !isset($packageJson["l10n"][$key]))
-            throw new Exception("The key $key is missing in the `l10n` entry in your package.json file.");
+            throw new Exception("The key `$key` is missing in the `l10n` entry in your package.json file.");
 
         return $packageJson["l10n"][$key];
     }

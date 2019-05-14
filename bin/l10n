@@ -8,7 +8,14 @@ require_once __DIR__ . '/src/TablesCommand.php';
 
 use Symfony\Component\Console\Application;
 
-$application = new Application("Catalog Manager");
-$application->add(new ExtractCommand());
-$application->add(new TablesCommand());
-$application->run();
+try
+{
+    $application = new Application("Catalog Manager");
+    $application->add(new ExtractCommand());
+    $application->add(new TablesCommand());
+    $application->run();
+}
+catch (Exception $e)
+{
+    printf("ERROR: %s\n", $e->getMessage());
+}

@@ -142,6 +142,7 @@ Luckily, we have a tool for this, but first, we must specify the desired target 
 ```json
 {
   "l10n" : {
+      "directory" : "l10n",
       "locales" : [
           "de-DE",
           "fr-FR"
@@ -155,6 +156,8 @@ Luckily, we have a tool for this, but first, we must specify the desired target 
 }
 ```
 
+The `directory` key specifies where the translations catalogs will be stored.
+
 The `locales` key specifies the locales into which your package should be translated. The format for locales is: two lowercase letters for the language, followed by a hyphen (not an underscore!), followed by two uppercase letters for the region/country. NOTE: This tool assumes the `en-US` locale as default, therefore you don’t need to add it.
 
 The `extract` key contains a list which specifies the files to be considered for the catalog. Each item in this list can either be a verbatim file name or a regular expression (PCRE).
@@ -165,7 +168,7 @@ When you’re done configuring your locales and catalog source files, you can ru
 npx l10n extract
 ```
 
-Assuming you have `"locales" : ["de-DE", "fr-FR"]`, the above command will create or update the catalogs for German and French. Catalogs reside in the `./l10n` directory. So after running the command for the first time, you will find the new files `./l10n/de-DE.po` and `./l10n/fr-FR.po` in your project. Don’t forget to put them under version control.
+Assuming you are using the configuration from the above example, the extractor will create or update the catalogs for German and French. Catalogs would be stored in the `./l10n` directory. So after running the command for the first time, you will find the new files `./l10n/de-DE.po` and `./l10n/fr-FR.po` in your project. Don’t forget to put them under version control.
 
 The `*.po` files can be given to a human translator or be run through a translation tool which supports this format (there are lots of them). After the `.po` files have been updated, we can create the JSON translation tables.
 

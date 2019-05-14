@@ -102,11 +102,9 @@ class TablesCommand extends AbstractCatalogCommand
 
             if ($this->filesystem->exists("$path/package.json"))
             {
-                $translationsDir = "$path/" . static::TRANSLATIONS_DIR;
-
                 foreach ($locales as $locale)
                 {
-                    $catalogFile = "$translationsDir/$locale.po";
+                    $catalogFile = "$path/{$this->translationsDir}/$locale.po";
 
                     if ($this->filesystem->exists($catalogFile))
                     {

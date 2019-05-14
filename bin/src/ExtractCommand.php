@@ -17,7 +17,7 @@ class ExtractCommand extends AbstractCatalogCommand
     {
         $this
             ->setName('extract')
-            ->setDescription('Extract translatable strings into a translation table (.po format).')
+            ->setDescription('Extracts translatable strings into a translation table (.po format).')
         ;
     }
 
@@ -29,7 +29,7 @@ class ExtractCommand extends AbstractCatalogCommand
         {
             if ($locale !== static::DEFAULT_LOCALE)
             {
-                $catalogFile = sprintf("%s/%s/%s.po", $this->workdir, static::TRANSLATIONS_DIR, $locale);
+                $catalogFile = sprintf("%s/%s/%s.po", $this->workdir, $this->translationsDir, $locale);
                 $catalog = $this->fillCatalog($locale, $catalogFile, $files);
                 $this->filesystem->dumpFile($catalogFile, $catalog->toPoString());
             }
