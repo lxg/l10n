@@ -28,7 +28,7 @@
     }
   ],
   "bin": {
-    "l10n": "./bin/l10n"
+    "l10n": "./bin/l10n.php"
   },
   "license": "ISC",
   "devDependencies": {
