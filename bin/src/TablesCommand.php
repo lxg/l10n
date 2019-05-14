@@ -64,7 +64,7 @@ class TablesCommand extends AbstractCatalogCommand
         // - we create a dummy catalog containing all translations we need
         // - we merge all translations we actually have into that catalog
 
-        $files = [];
+        $files = $this->getSourceFiles($sources);
         $catalogs = [];
 
         foreach ($locales as $locale)
@@ -72,45 +72,20 @@ class TablesCommand extends AbstractCatalogCommand
             $catalogs[$locale] = new Translations();
         }
 
-        foreach ($sources as $source)
-        {
-            $files += $this->getSourceFiles($source);
+        foreach ($files as $file => $alias) {
+            $packageCatalogs = $this->getPackageCatalogs($file, $locales);
 
-            foreach ($files as $file => $alias) {
-                $packageCatalogs = $this->getPackageCatalogs($file, $locales);
-
-                foreach ($packageCatalogs as $locale => $packageCatalog)
-                {
-                    // this is a dummy catalog containing only the translations needed in the file.
-                    // we will now merge this catalog with the entire catalog of the respective package to get the intersection.
-                    $fileCatalog = $this->createCatalog($locale, [$file]);
-                    $fileCatalog->mergeWith($packageCatalog, 0);
-                    $catalogs[$locale]->mergeWith($fileCatalog, Merge::ADD);
-                }
+            foreach ($packageCatalogs as $locale => $packageCatalog)
+            {
+                // this is a dummy catalog containing only the translations needed in the file.
+                // we will now merge this catalog with the entire catalog of the respective package to get the intersection.
+                $fileCatalog = $this->createCatalog($locale, [$file]);
+                $fileCatalog->mergeWith($packageCatalog, 0);
+                $catalogs[$locale]->mergeWith($fileCatalog, Merge::ADD);
             }
         }
 
         return $catalogs;
-    }
-
-    private function getSourceFiles($source)
-    {
-        $files = [];
-
-        /**
-         * @var Finder
-         */
-        $finder = (new Finder())->in($this->workdir)
-            ->path($source);
-
-        foreach ($finder as $file)
-        {
-            $filePath = $file->getRealpath();
-            $alias = str_replace("{$this->workdir}/", "", $filePath);
-            $files[$filePath] = $alias;
-        }
-
-        return $files;
     }
 
     private function getPackageCatalogs($path, $locales) : array

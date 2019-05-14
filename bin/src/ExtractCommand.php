@@ -23,7 +23,7 @@ class ExtractCommand extends AbstractCatalogCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $files = array_flip($this->getSourceFiles());
+        $files = array_flip($this->getSourceFiles($this->getPackageJsonKey("extract")));
 
         foreach ($this->getLocales() as $locale)
         {
@@ -34,25 +34,6 @@ class ExtractCommand extends AbstractCatalogCommand
                 $this->filesystem->dumpFile($catalogFile, $catalog->toPoString());
             }
         }
-    }
-
-    private function getSourceFiles() : array
-    {
-        $files = [];
-        $finder = (new Finder())->in($this->workdir)
-            ->name("*\.js")
-            ->name("*\.mjs")
-            ->notPath('|' . static::TRANSLATIONS_DIR . '/|')
-            ->notPath('|node_modules|');
-
-        foreach ($finder as $file)
-        {
-            $filePath = $file->getRealpath();
-            $alias = str_replace("{$this->workdir}/", "", $filePath);
-            $files[$filePath] = $alias;
-        }
-
-        return $files;
     }
 
     private function fillCatalog(string $locale, string $catalogFile, array $files) : Translations

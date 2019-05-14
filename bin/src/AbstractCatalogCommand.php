@@ -77,6 +77,38 @@ abstract class AbstractCatalogCommand extends Command
         return $packageJson["l10n"][$key];
     }
 
+    /**
+     * Creates a list of files from a list of Finder patterns
+     * @param  string[] $sources list of Finder patterns
+     * @return string[] list of actual files
+     */
+    protected function getSourceFiles(array $sources)
+    {
+        /**
+        * @var Finder
+        */
+        $finder = (new Finder())->in($this->workdir);
+        $files = [];
+
+        foreach ($sources as $source)
+        {
+            $finder->path($source);
+        }
+
+        foreach ($finder as $file)
+        {
+            $filePath = $file->getRealpath();
+            $alias = str_replace("{$this->workdir}/", "", $filePath);
+            $files[$filePath] = $alias;
+        }
+
+        return $files;
+    }
+
+
+
+
+
     protected function getLocales() : array
     {
         if (is_null($this->locales))
