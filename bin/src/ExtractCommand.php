@@ -23,13 +23,13 @@ class ExtractCommand extends AbstractCatalogCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $files = array_flip($this->getSourceFiles($this->getPackageJsonKey("extract")));
+        $files = array_flip($this->getSourceFiles($this->config->extract));
 
-        foreach ($this->getLocales() as $locale)
+        foreach ($this->config->locales as $locale)
         {
             if ($locale !== static::DEFAULT_LOCALE)
             {
-                $catalogFile = sprintf("%s/%s/%s.po", $this->workdir, $this->translationsDir, $locale);
+                $catalogFile = sprintf("%s/%s/%s.po", $this->workdir, $this->config->directory, $locale);
                 $catalog = $this->fillCatalog($locale, $catalogFile, $files);
                 $this->filesystem->dumpFile($catalogFile, $catalog->toPoString());
             }

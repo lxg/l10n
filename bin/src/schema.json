@@ -1,0 +1,43 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+
+    "_definitions": {
+        "fileList": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+                "type": "string"
+            }
+        }
+    },
+
+    "type": "object",
+    "properties": {
+        "directory": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 100
+        },
+        "locales": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+                "type": "string",
+                "pattern": "^[a-z]{2}-[A-Z]{2}$"
+            }
+        },
+        "extract": {
+            "$ref": "#/_definitions/fileList"
+        },
+        "tables": {
+            "type": "object",
+            "patternProperties": {
+                "^.*$": {
+                    "$ref": "#/_definitions/fileList"
+                }
+            }
+        }
+    },
+    "additionalProperties": false,
+    "required": ["directory", "locales", "extract"]
+}

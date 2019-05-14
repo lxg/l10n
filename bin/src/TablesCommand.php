@@ -24,15 +24,13 @@ class TablesCommand extends AbstractCatalogCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $locales = $this->getLocales();
-
-        foreach ($this->getPackageJsonKey("tables") as $targetFile => $sources)
+        foreach ($this->config->tables as $targetFile => $sources)
         {
             /**
              * @var Translations[]
              */
-            $catalogs = $this->createCatalogs($locales, $sources);
-            $tables = array_fill_keys($locales, []);
+            $catalogs = $this->createCatalogs($this->config->locales, $sources);
+            $tables = array_fill_keys($this->config->locales, []);
 
             foreach ($catalogs as $locale => $catalog)
             {
@@ -104,7 +102,7 @@ class TablesCommand extends AbstractCatalogCommand
             {
                 foreach ($locales as $locale)
                 {
-                    $catalogFile = "$path/{$this->translationsDir}/$locale.po";
+                    $catalogFile = "$path/{$this->config->directory}/$locale.po";
 
                     if ($this->filesystem->exists($catalogFile))
                     {
