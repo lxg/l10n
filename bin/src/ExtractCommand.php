@@ -1,15 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
-use Gettext\Translation;
 use Gettext\Translations;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Console\Application;
 
 class ExtractCommand extends AbstractCatalogCommand
 {
@@ -17,8 +10,7 @@ class ExtractCommand extends AbstractCatalogCommand
     {
         $this
             ->setName('extract')
-            ->setDescription('Extracts translatable strings into a translation table (.po format).')
-        ;
+            ->setDescription('Extracts translatable strings into a translation table (.po format).');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -29,7 +21,7 @@ class ExtractCommand extends AbstractCatalogCommand
         {
             if ($locale !== static::DEFAULT_LOCALE)
             {
-                $catalogFile = sprintf("%s/%s/%s.po", $this->workdir, $this->config->directory, $locale);
+                $catalogFile = sprintf('%s/%s/%s.po', $this->workdir, $this->config->directory, $locale);
                 $catalog = $this->fillCatalog($locale, $catalogFile, $files);
                 $this->filesystem->dumpFile($catalogFile, $catalog->toPoString());
             }

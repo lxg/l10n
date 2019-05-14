@@ -1,16 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 use Gettext\Merge;
 use Gettext\Translation;
 use Gettext\Translations;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Console\Application;
 
 class TablesCommand extends AbstractCatalogCommand
 {
@@ -18,8 +12,7 @@ class TablesCommand extends AbstractCatalogCommand
     {
         $this
             ->setName('tables')
-            ->setDescription('Creates translation tables for sets of source files as specified in the package.json.')
-        ;
+            ->setDescription('Creates translation tables for sets of source files as specified in the package.json.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -70,7 +63,8 @@ class TablesCommand extends AbstractCatalogCommand
             $catalogs[$locale] = new Translations();
         }
 
-        foreach ($files as $file => $alias) {
+        foreach ($files as $file => $alias)
+        {
             $packageCatalogs = $this->getPackageCatalogs($file, $locales);
 
             foreach ($packageCatalogs as $locale => $packageCatalog)
@@ -94,8 +88,8 @@ class TablesCommand extends AbstractCatalogCommand
 
         $catalogs = [];
 
-        while ($path !== "/") // TODO: What happens on Windows? Infinite loop?
-        {
+        while ($path !== '/')
+        { // TODO: What happens on Windows? Infinite loop?
             $path = dirname($path);
 
             if ($this->filesystem->exists("$path/package.json"))

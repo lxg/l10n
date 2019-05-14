@@ -1,26 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 
-use Gettext\Translation;
 use Gettext\Translations;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Console\Application;
-
 
 abstract class AbstractCatalogCommand extends Command
 {
-    const DEFAULT_LOCALE = "en-US";
-
-    private $extractorOptions = ['functions' => [
-        't' => 'gettext',
-        'x' => 'pgettext',
-        'n' => 'ngettext'
-    ]];
+    const DEFAULT_LOCALE = 'en-US';
 
     /**
      * @var Filesystem
@@ -36,6 +23,12 @@ abstract class AbstractCatalogCommand extends Command
      * @var array
      */
     protected $config;
+
+    private $extractorOptions = ['functions' => [
+        't' => 'gettext',
+        'x' => 'pgettext',
+        'n' => 'ngettext'
+    ]];
 
     public function __construct(string $workdir, object $config)
     {
@@ -53,8 +46,8 @@ abstract class AbstractCatalogCommand extends Command
     protected function getSourceFiles(array $sources)
     {
         /**
-        * @var Finder
-        */
+         * @var Finder
+         */
         $finder = (new Finder())->in($this->workdir);
         $files = [];
 
@@ -66,7 +59,7 @@ abstract class AbstractCatalogCommand extends Command
         foreach ($finder as $file)
         {
             $filePath = $file->getRealpath();
-            $alias = str_replace("{$this->workdir}/", "", $filePath);
+            $alias = str_replace("{$this->workdir}/", '', $filePath);
             $files[$filePath] = $alias;
         }
 
@@ -77,7 +70,7 @@ abstract class AbstractCatalogCommand extends Command
     {
         $catalog = new Translations();
         $catalog->deleteHeaders();
-        $catalog->setLanguage(str_replace("-", "_", $locale));
+        $catalog->setLanguage(str_replace('-', '_', $locale));
 
         if ($files)
         {

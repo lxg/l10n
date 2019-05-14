@@ -6,17 +6,18 @@ require_once __DIR__ . '/src/AbstractCatalogCommand.php';
 require_once __DIR__ . '/src/ExtractCommand.php';
 require_once __DIR__ . '/src/TablesCommand.php';
 
+use Opis\JsonSchema\Schema;
+use Opis\JsonSchema\ValidationError;
+use Opis\JsonSchema\ValidationResult;
+use Opis\JsonSchema\Validator;
 use Symfony\Component\Console\Application;
-use Opis\JsonSchema\{
-    Validator, ValidationResult, ValidationError, Schema
-};
 
 try
 {
     $workdir = getcwd();
     $config = loadConfig($workdir);
 
-    $application = new Application("Catalog Manager");
+    $application = new Application('Catalog Manager');
     $application->add(new ExtractCommand($workdir, $config));
     $application->add(new TablesCommand($workdir, $config));
     $application->run();
@@ -26,9 +27,9 @@ catch (Exception $e)
     printf("ERROR: %s\n", $e->getMessage());
 }
 
-function  loadConfig($workdir)
+function loadConfig($workdir)
 {
-   $packageJsonFile = "$workdir/package.json";
+    $packageJsonFile = "$workdir/package.json";
 
     if (!file_exists($packageJsonFile))
     {
@@ -37,8 +38,10 @@ function  loadConfig($workdir)
 
     $packageJson = json_decode(file_get_contents($packageJsonFile));
 
-    if (!property_exists($packageJson, "l10n"))
-        throw new Exception("The `l10n` entry is missing from your package.json file.");
+    if (!property_exists($packageJson, 'l10n'))
+    {
+        throw new Exception('The `l10n` entry is missing from your package.json file.');
+    }
 
     $config = $packageJson->l10n;
     $schema = Schema::fromJsonString(file_get_contents(__DIR__ . '/src/schema.json'));
@@ -53,9 +56,11 @@ function  loadConfig($workdir)
         /** @var ValidationError $error */
         $error = $result->getFirstError();
 
-        $message = sprintf("Your `l10n` entry in package.json is invalid: %s\n",
+        $message = sprintf(
+            "Your `l10n` entry in package.json is invalid: %s\n",
             $error->keyword(),
-            json_encode($error, JSON_PRETTY_PRINT));
+            json_encode($error, JSON_PRETTY_PRINT)
+        );
 
         throw new Exception($message);
     }
