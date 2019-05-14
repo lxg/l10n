@@ -9,7 +9,7 @@ Why do we need yet another JS Gettext implementation, aren’t there enough alre
 It also has a few additional advantages:
 
 - Super small footprint: only 1.3 kB compressed/minified
-- No dependencies
+- No runtime dependencies
 - Pure ES6: No RequireJS/CommonJS/AMD overhead
 - Large variety of pluralisation rules, especially where `n != 1` doesn’t work
 - Context-aware translations
