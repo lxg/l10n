@@ -30,11 +30,11 @@ abstract class AbstractCatalogCommand extends Command
         'n' => 'ngettext'
     ]];
 
-    public function __construct(string $workdir, object $config)
+    public function __construct(string $workdir, $config)
     {
         parent::__construct();
         $this->workdir = $workdir;
-        $this->config = $config;
+        $this->config = (object)$config;
         $this->filesystem = new Filesystem();
     }
 
