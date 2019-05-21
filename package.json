@@ -2,9 +2,9 @@
   "name": "@tuicom/l10n",
   "version": "3.1.1",
   "description": "A lightweight translation library",
-  "main": "l10n.js",
+  "main": "l10n",
   "scripts": {
-    "build": "for script in $(ls *.js); do npx parcel build --no-cache $script; done"
+    "build": "for script in $(ls *.mjs); do npx parcel build --out-dir=. --no-cache $script; done"
   },
   "keywords": [
     "internationalisation",
