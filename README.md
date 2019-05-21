@@ -92,6 +92,15 @@ l10n.x("item count" "Amount");
 // plural form, but only return the correct message. See below for a simple
 // sprintf() implementation to do the substitution for you.
 l10n.n("One apple", "%s apples", 4);
+
+// variant of l10n.t() which allows selecting a target locale directly
+l10n.tl = (msgid, locale)
+
+// variant of l10n.x() which allows selecting a target locale directly
+l10n.xl = (context, msgid, locale)
+
+// variant of l10n.n() which allows selecting a target locale directly
+l10n.nl = (msgid, msgidPlural, amount, locale)
 ```
 
 #### Simple `sprintf()` implementation
