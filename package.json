@@ -4,7 +4,7 @@
   "description": "A lightweight translation library",
   "main": "l10n",
   "scripts": {
-    "build": "for script in $(ls *.mjs); do npx parcel build --out-dir=. --no-cache $script; done"
+    "build": "for script in date l10n; do npx babel $script.mjs --presets=@babel/env > $script.js; npx eslint $script.js --fix; done"
   },
   "keywords": [
     "internationalisation",
@@ -32,6 +32,9 @@
   },
   "license": "ISC",
   "devDependencies": {
-    "parcel": "^1.12.3"
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "eslint": "^5.16.0"
   }
 }

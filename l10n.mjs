@@ -97,11 +97,11 @@ l10n.x = l10n.xl
  */
 l10n.n = l10n.nl
 
-l10n.setLocale = (loc, _init) => {
+l10n.setLocale = (loc /*, _init*/) => {
     locale = loc;
     language = locale.substr(0, 2);
 
-    // disabled for now, because it doesn't work in ES5
+    // disabled for now, because it doesn't work in IE11
     // _init || document.dispatchEvent(new CustomEvent("l10n.locale.switch", { detail : { locale } }));
 };
 
