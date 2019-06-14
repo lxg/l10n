@@ -27,7 +27,10 @@ abstract class AbstractCatalogCommand extends Command
     private $extractorOptions = ['functions' => [
         't' => 'gettext',
         'x' => 'pgettext',
-        'n' => 'ngettext'
+        'n' => 'ngettext',
+        'tl' => 'gettext',
+        'xl' => 'pgettext',
+        'nl' => 'ngettext'
     ]];
 
     public function __construct(string $workdir, $config)
@@ -80,6 +83,16 @@ abstract class AbstractCatalogCommand extends Command
             }
         }
 
-        return $catalog;
+        return $this->deleteReferences($catalog);
+    }
+
+    protected function deleteReferences(Translations $translations) : Translations
+    {
+        foreach ($translations as $translation)
+        {
+            $translation->deleteReferences();
+        }
+
+        return $translations;
     }
 }

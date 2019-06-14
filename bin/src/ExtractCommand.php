@@ -40,14 +40,4 @@ class ExtractCommand extends AbstractCatalogCommand
 
         return $catalog;
     }
-
-    private function deleteReferences(Translations $translations) : Translations
-    {
-        foreach ($translations as $translation)
-        {
-            $translation->deleteReferences();
-        }
-
-        return $translations;
-    }
 }
