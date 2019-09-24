@@ -119,7 +119,7 @@ l10n.setLocale = function (loc
 /*, _init*/
 ) {
   locale = loc;
-  language = locale.substr(0, 2); // disabled for now, because it doesn't work in IE11
+  language = locale.substr(0, 2); // disabled for now, because breaks IE11
   // _init || document.dispatchEvent(new CustomEvent("l10n.locale.switch", { detail : { locale } }));
 };
 
