@@ -1,7 +1,8 @@
 export default function l10n(translations) {
     Object.keys(translations).forEach(loc => {
-        catalogs[loc] = catalogs[loc] || {};
-        Object.keys(translations[loc]).forEach(msgid => catalogs[loc][msgid] = translations[loc][msgid]);
+        catalogs[loc] = catalogs[loc] || {}
+        Object.keys(translations[loc]).forEach(msgid => catalogs[loc][msgid] = translations[loc][msgid])
+        fallbacks[loc.substr(0, 2)] = loc
     })
 }
 
@@ -101,7 +102,7 @@ l10n.setLocale = (loc /*, _init*/) => {
     locale = loc;
     language = locale.substr(0, 2);
 
-    // disabled for now, because it doesn't work in IE11
+    // disabled for now, because breaks IE11
     // _init || document.dispatchEvent(new CustomEvent("l10n.locale.switch", { detail : { locale } }));
 };
 
@@ -109,25 +110,30 @@ document.addEventListener("l10n.locale.set", ev => l10n.setLocale(ev.detail.loca
 
 // private
 
-let locale, language;
+let locale, language, fallbacks = {}
 
-l10n.setLocale(navigator.language, true);
-l10n.getLocale = () => locale;
+l10n.setLocale(navigator.language, true)
+l10n.getLocale = () => locale
 
-let catalogs = {};
-let pluralCallbacks = {};
-let getEntry = (msgid, loc) => catalogs[loc || locale] ? catalogs[loc || locale][msgid] : undefined;
+let catalogs = {}
+let pluralCallbacks = {}
 
-let getPluralMessageIdx = amount => {
+const getEntry = (msgid, loc) => {
+    const lang = loc ? loc.substr(0, 2) : language
+    const key = loc || fallbacks[lang] || locale || fallbacks[language]
+    return catalogs[key] ? catalogs[key][msgid] : undefined
+}
+
+const getPluralMessageIdx = amount => {
     if (!pluralCallbacks[language])
         /*jshint evil:true */
         pluralCallbacks[language] = new Function("n", `return (${plurals[language] || plurals._default}) | 0`);
 
     return pluralCallbacks[language](amount);
-};
+}
 
 // Gettext pluralisation rules for many languages
-let plurals = {
+const plurals = {
     _default:"n!=1",
     ak:"n>1",
     am:"n>1",

@@ -11,6 +11,7 @@ function l10n(translations) {
     Object.keys(translations[loc]).forEach(function (msgid) {
       return catalogs[loc][msgid] = translations[loc][msgid];
     });
+    fallbacks[loc.substr(0, 2)] = loc;
   });
 }
 /**
@@ -126,7 +127,9 @@ document.addEventListener("l10n.locale.set", function (ev) {
   return l10n.setLocale(ev.detail.locale);
 }); // private
 
-var locale, language;
+var locale,
+    language,
+    fallbacks = {};
 l10n.setLocale(navigator.language, true);
 
 l10n.getLocale = function () {
@@ -137,7 +140,9 @@ var catalogs = {};
 var pluralCallbacks = {};
 
 var getEntry = function getEntry(msgid, loc) {
-  return catalogs[loc || locale] ? catalogs[loc || locale][msgid] : undefined;
+  var lang = loc ? loc.substr(0, 2) : language;
+  var key = loc || fallbacks[lang] || locale || fallbacks[language];
+  return catalogs[key] ? catalogs[key][msgid] : undefined;
 };
 
 var getPluralMessageIdx = function getPluralMessageIdx(amount) {
