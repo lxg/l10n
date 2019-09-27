@@ -141,7 +141,11 @@ var pluralCallbacks = {};
 
 var getEntry = function getEntry(msgid, loc) {
   var lang = loc ? loc.substr(0, 2) : language;
-  var key = loc || fallbacks[lang] || locale || fallbacks[language];
+  var key; // Determine which entry to use. Either from the requested locale (`loc` parameter
+  // used by the tl/xl/nl methods), or its language. Or from the global locale (used
+  // by the t/x/n methods), or its language.
+
+  if (catalogs[loc]) key = loc;else if (catalogs[fallbacks[lang]]) key = fallbacks[lang];else if (!loc && catalogs[locale]) key = locale;else if (!loc && catalogs[fallbacks[language]]) key = fallbacks[language];
   return catalogs[key] ? catalogs[key][msgid] : undefined;
 };
 
