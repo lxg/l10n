@@ -1,153 +1,113 @@
-export default function l10n(translations) {
-    Object.keys(translations).forEach(loc => {
-        catalogs[loc] = catalogs[loc] || {}
-        Object.keys(translations[loc]).forEach(msgid => catalogs[loc][msgid] = translations[loc][msgid])
-        fallbacks[loc.substr(0, 2)] = loc
-    })
+export default class L10n {
+
+    constructor(translations, locale = navigator.language) {
+        this.catalogs = {}
+        this.setLocale(locale)
+        this.fallbacks = {}
+
+        Object.keys(translations).forEach(loc => {
+            const lang = loc.substr(0, 2)
+            this.catalogs[loc] = this.catalogs[loc] || {}
+            Object.keys(translations[loc]).forEach(msgid => this.catalogs[loc][msgid] = translations[loc][msgid])
+            this.fallbacks[lang] = loc
+        })
+    }
+
+    /**
+     * sets the locale.
+     *
+     * @param string locale
+     */
+    setLocale(locale) {
+        this.locale = locale
+        this.language = locale.substr(0, 2)
+    }
+
+    /**
+     * returns the current locale.
+     *
+     * @return string current locale
+     */
+    getLocale() {
+        return this.locale
+    }
+
+    /**
+     * Translates a string into the given locale.
+     *
+     * @param  string msgid the message to translate
+     * @param  string loc the target locale
+     * @return string the translated message, or, if there is no translation, the original message
+     */
+    t(msgid) {
+        return this.getEntry(msgid) || msgid
+    }
+
+    /**
+     * Translates a string in a certain context into the given locale.
+     *
+     * This is useful when two original strings have different meanings and will most
+     * likely require different translations.
+     *
+     * For example, in a financial context, the English word “amount” would translate
+     * to the German „Betrag“, while in a context where items are counted, the German
+     * translation would be „Anzahl“. Prefixing the translation with a context allows
+     * translators to add both translations.
+     *
+     * @param  string context the context
+     * @param  string msgid the message to translate
+     * @param  string loc the target locale
+     * @return string the translated message, or, if there is no translation, the original message
+     */
+    x(context, msgid) {
+        return this.getEntry(context + "\u0004" + msgid) || msgid
+    }
+
+    /**
+     * Translates a pluralized string in a certain context into the given locale.
+     *
+     * This function uses “pluralisation rules” to determine the correct form in the target
+     * language. For example, many languages have more than two plural forms, and this
+     * function will select the correct one.
+     *
+     * NOTE: This function will not fill in the value into the placeholder in the
+     * plural form, but only return the correct message. You must either use something like
+     * sprintf() or some other replacement implementation, e.g. `msg.replace("%s", value)`.
+     *
+     * @param  string msgid the message to translate, singular form
+     * @param  string msgidPlural the message to translate, plural form
+     * @param  integer amount number to use to determine the correct plural form
+     * @return string the translated message, or, if there is no translation, the original message
+     */
+    n(msgid, msgidPlural, amount) {
+        const entry = this.getEntry(msgid)
+        return (entry && entry[0] && entry[1]) ? entry[this.getPluralMessageIdx(amount)] : (amount === 1 ? msgid : msgidPlural)
+    }
+
+    getEntry(msgid) {
+        let key
+
+        if (this.catalogs[this.locale])
+            key = this.locale
+
+        else if (this.catalogs[this.fallbacks[this.language]])
+            key = this.fallbacks[this.language]
+
+        return this.catalogs[key] ? this.catalogs[key][msgid] : undefined
+    }
+
+    getPluralMessageIdx(amount) {
+        if (!pluralCallbacks[this.language])
+            /*jshint evil:true */
+            pluralCallbacks[this.language] = new Function("n", `return (${plurals[this.language] || plurals._default}) | 0`);
+
+        return pluralCallbacks[this.language](amount);
+    }
 }
 
-/**
- * Translates a string into the given locale.
- *
- * @param  string msgid the message to translate
- * @param  string loc the target locale
- * @return string the translated message, or, if there is no translation, the original message
- */
-l10n.tl = (msgid, loc) => getEntry(msgid, loc) || msgid
 
-/**
- * Translates a string in a certain context into the given locale.
- *
- * This is useful when two original strings have different meanings and will most
- * likely require different translations.
- *
- * For example, in a financial context, the English word “amount” would translate
- * to the German „Betrag“, while in a context where items are counted, the German
- * translation would be „Anzahl“. Prefixing the translation with a context allows
- * translators to add both translations.
- *
- * @param  string context the context
- * @param  string msgid the message to translate
- * @param  string loc the target locale
- * @return string the translated message, or, if there is no translation, the original message
- */
-l10n.xl = (context, msgid, loc) => getEntry(context + "\u0004" + msgid, loc) || msgid;
 
-/**
- * Translates a pluralized string in a certain context into the given locale.
- *
- * This function uses “pluralisation rules” to determine the correct form in the target
- * language. For example, many languages have more than two plural forms, and this
- * function will select the correct one.
- *
- * NOTE: This function will not fill in the value into the placeholder in the
- * plural form, but only return the correct message. You must either use something like
- * sprintf() or some other replacement implementation, e.g. `msg.replace("%s", value)`.
- *
- * @param  string msgid the message to translate, singular form
- * @param  string msgidPlural the message to translate, plural form
- * @param  integer amount number to use to determine the correct plural form
- * @param  string loc the target locale
- * @return string the translated message, or, if there is no translation, the original message
- */
-l10n.nl = (msgid, msgidPlural, amount, loc) => {
-    const entry = getEntry(msgid, loc)
-    return  (entry && entry[0] && entry[1]) ? entry[getPluralMessageIdx(amount)] : (amount === 1 ? msgid : msgidPlural)
-}
-
-/**
- * Translates a string into the currently set locale.
- *
- * @param  string msgid the message to translate
- * @return string the translated message, or, if there is no translation, the original message
- */
-l10n.t = l10n.tl
-
-/**
- * Translates a string in a certain context into the currently set locale.
- *
- * This is useful when two original strings have different meanings and will most
- * likely require different translations.
- *
- * For example, in a financial context, the English word “amount” would translate
- * to the German „Betrag“, while in a context where items are counted, the German
- * translation would be „Anzahl“. Prefixing the translation with a context allows
- * translators to add both translations.
- *
- * @param  string context the context
- * @param  string msgid the message to translate
- * @return string the translated message, or, if there is no translation, the original message
- */
-l10n.x = l10n.xl
-
-/**
- * Translates a pluralized string in a certain context into the currently set locale.
- *
- * This function uses “pluralisation rules” to determine the correct form in the target
- * language. For example, many languages have more than two plural forms, and this
- * function will select the correct one.
- *
- * NOTE: This function will not fill in the value into the placeholder in the
- * plural form, but only return the correct message. You must either use something like
- * sprintf() or some other replacement implementation, e.g. `msg.replace("%s", value)`.
- *
- * @param  string msgid the message to translate, singular form
- * @param  string msgidPlural the message to translate, plural form
- * @param  integer amount number to use to determine the correct plural form
- * @return string the translated message, or, if there is no translation, the original message
- */
-l10n.n = l10n.nl
-
-l10n.setLocale = (loc /*, _init*/) => {
-    locale = loc;
-    language = locale.substr(0, 2);
-
-    // disabled for now, because breaks IE11
-    // _init || document.dispatchEvent(new CustomEvent("l10n.locale.switch", { detail : { locale } }));
-};
-
-document.addEventListener("l10n.locale.set", ev => l10n.setLocale(ev.detail.locale));
-
-// private
-
-let locale, language, fallbacks = {}
-
-l10n.setLocale(navigator.language, true)
-l10n.getLocale = () => locale
-
-let catalogs = {}
 let pluralCallbacks = {}
-
-const getEntry = (msgid, loc) => {
-    const lang = loc ? loc.substr(0, 2) : language
-    let key
-
-    // Determine which entry to use. Either from the requested locale (`loc` parameter
-    // used by the tl/xl/nl methods), or its language. Or from the global locale (used
-    // by the t/x/n methods), or its language.
-
-    if (catalogs[loc])
-        key = loc
-
-    else if (catalogs[fallbacks[lang]])
-        key = fallbacks[lang]
-
-    else if (!loc && catalogs[locale])
-        key = locale
-
-    else if (!loc && catalogs[fallbacks[language]])
-        key = fallbacks[language]
-
-    return catalogs[key] ? catalogs[key][msgid] : undefined
-}
-
-const getPluralMessageIdx = amount => {
-    if (!pluralCallbacks[language])
-        /*jshint evil:true */
-        pluralCallbacks[language] = new Function("n", `return (${plurals[language] || plurals._default}) | 0`);
-
-    return pluralCallbacks[language](amount);
-}
 
 // Gettext pluralisation rules for many languages
 const plurals = {
@@ -206,4 +166,4 @@ const plurals = {
     vi:"0",
     wa:"n>1",
     zh:"0"
-};
+}
