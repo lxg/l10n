@@ -115,6 +115,8 @@ function () {
       var entry = this.getEntry(msgid);
       return entry && entry[0] && entry[1] ? entry[this.getPluralMessageIdx(amount)] : amount === 1 ? msgid : msgidPlural;
     }
+    /*istanbul ignore next */
+
   }, {
     key: "getEntry",
     value: function getEntry(msgid) {
@@ -122,6 +124,8 @@ function () {
       if (this.catalogs[this.locale]) key = this.locale;else if (this.catalogs[this.fallbacks[this.language]]) key = this.fallbacks[this.language];
       return this.catalogs[key] ? this.catalogs[key][msgid] : undefined;
     }
+    /*istanbul ignore next */
+
   }, {
     key: "getPluralMessageIdx",
     value: function getPluralMessageIdx(amount) {

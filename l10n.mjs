@@ -84,6 +84,7 @@ export default class L10n {
         return (entry && entry[0] && entry[1]) ? entry[this.getPluralMessageIdx(amount)] : (amount === 1 ? msgid : msgidPlural)
     }
 
+    /*istanbul ignore next */
     getEntry(msgid) {
         let key
 
@@ -96,6 +97,7 @@ export default class L10n {
         return this.catalogs[key] ? this.catalogs[key][msgid] : undefined
     }
 
+    /*istanbul ignore next */
     getPluralMessageIdx(amount) {
         if (!pluralCallbacks[this.language])
             /*jshint evil:true */

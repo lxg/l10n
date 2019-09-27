@@ -1,40 +1,63 @@
 {
-  "name": "@tuicom/l10n",
-  "version": "4.2.1",
-  "description": "A lightweight translation library",
-  "main": "l10n",
-  "scripts": {
-    "build": "for script in date l10n; do npx babel $script.mjs --presets=@babel/env > $script.js; npx eslint $script.js --fix; done"
-  },
-  "keywords": [
-    "internationalisation",
-    "i18n",
-    "localization",
-    "l10n",
-    "translation",
-    "translate",
-    "localize",
-    "gettext"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tuicom/l10n.git"
-  },
-  "author": "TUI Deutschland GmbH",
-  "contributors": [
-    {
-      "name": "Alexander Günsche",
-      "email": "alexander.guensche@tui.de"
+    "name": "@tuicom/l10n",
+    "version": "4.2.1",
+    "description": "A lightweight translation library",
+    "main": "l10n",
+    "scripts": {
+        "test": "jest",
+        "build": "for script in date l10n; do npx babel $script.mjs --presets=@babel/env > $script.js; npx eslint $script.js --fix; done"
+    },
+    "keywords": [
+        "internationalisation",
+        "i18n",
+        "localization",
+        "l10n",
+        "translation",
+        "translate",
+        "localize",
+        "gettext"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/tuicom/l10n.git"
+    },
+    "author": "TUI Deutschland GmbH",
+    "contributors": [{
+        "name": "Alexander Günsche",
+        "email": "alexander.guensche@tui.de"
+    }],
+    "bin": {
+        "l10n": "./bin/l10n.php"
+    },
+    "license": "ISC",
+    "devDependencies": {
+        "@babel/cli": "^7.4.4",
+        "@babel/core": "^7.4.5",
+        "@babel/plugin-transform-modules-commonjs": "^7.6.0",
+        "@babel/preset-env": "^7.4.5",
+        "eslint": "^5.16.0",
+        "jest": "^24.9.0"
+    },
+    "jest": {
+        "testMatch": [
+            "**/__tests__/**/*.?(m)js?(x)",
+            "**/?(*.)(spec|test).?(m)js?(x)"
+        ],
+        "moduleFileExtensions": ["js", "mjs"],
+        "transform": {
+            "^.+\\.m?js$": "babel-jest"
+        }
+    },
+    "babel": {
+        "env": {
+            "test": {
+                "presets": [
+                    ["@babel/env"]
+                ],
+                "plugins": [
+                    ["@babel/plugin-transform-modules-commonjs"]
+                ]
+            }
+        }
     }
-  ],
-  "bin": {
-    "l10n": "./bin/l10n.php"
-  },
-  "license": "ISC",
-  "devDependencies": {
-    "@babel/cli": "^7.4.4",
-    "@babel/core": "^7.4.5",
-    "@babel/preset-env": "^7.4.5",
-    "eslint": "^5.16.0"
-  }
 }
