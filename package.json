@@ -1,6 +1,6 @@
 {
   "name": "@tuicom/l10n",
-  "version": "4.2.0",
+  "version": "4.2.1",
   "description": "A lightweight translation library",
   "main": "l10n",
   "scripts": {
