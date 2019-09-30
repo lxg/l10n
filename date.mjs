@@ -7,7 +7,7 @@ import l10n from "./l10n.mjs";
  * @param  {string} the date pattern
  * @return {string} the real date expression
  */
-export default function date() {};
+export default function date() {}
 
 date.fmt = (dateObj, string) => string
     .split("")

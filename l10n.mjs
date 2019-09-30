@@ -107,8 +107,6 @@ export default class L10n {
     }
 }
 
-
-
 let pluralCallbacks = {}
 
 // Gettext pluralisation rules for many languages

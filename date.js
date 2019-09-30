@@ -18,8 +18,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
  */
 function date() {}
 
-
-
 date.fmt = function (dateObj, string) {
   return string.split("").map(function (_char) {
     return dateFn[_char] ? dateFn[_char](dateObj) : _char;
