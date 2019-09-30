@@ -4,8 +4,11 @@
     "description": "A lightweight translation library",
     "main": "l10n",
     "scripts": {
+        "lint": "for script in $(ls *.mjs | grep -v test.mjs); do npx eslint $script; done",
+        "lint:fix": "for script in $(ls *.mjs | grep -v test.mjs); do npx eslint $script --fix; done",
         "test": "jest",
-        "build": "for script in date l10n; do npx babel $script.mjs --presets=@babel/env > $script.js; npx eslint $script.js --fix; done"
+        "test:coverage": "jest --coverage",
+        "build": "for script in $(ls *.mjs | grep -v test.mjs | sed -e 's|.mjs||g'); do npx babel $script.mjs --presets=@babel/env > $script.js; npx eslint $script.js --fix; done"
     },
     "keywords": [
         "internationalisation",
@@ -36,6 +39,7 @@
         "@babel/plugin-transform-modules-commonjs": "^7.6.0",
         "@babel/preset-env": "^7.4.5",
         "eslint": "^5.16.0",
+        "eslint-plugin-jest": "^22.17.0",
         "jest": "^24.9.0"
     },
     "jest": {
@@ -43,7 +47,10 @@
             "**/__tests__/**/*.?(m)js?(x)",
             "**/?(*.)(spec|test).?(m)js?(x)"
         ],
-        "moduleFileExtensions": ["js", "mjs"],
+        "moduleFileExtensions": [
+            "js",
+            "mjs"
+        ],
         "transform": {
             "^.+\\.m?js$": "babel-jest"
         }
@@ -52,10 +59,10 @@
         "env": {
             "test": {
                 "presets": [
-                    ["@babel/env"]
+                    [ "@babel/env" ]
                 ],
                 "plugins": [
-                    ["@babel/plugin-transform-modules-commonjs"]
+                    [ "@babel/plugin-transform-modules-commonjs" ]
                 ]
             }
         }
