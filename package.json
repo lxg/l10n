@@ -1,6 +1,6 @@
 {
     "name": "@tuicom/l10n",
-    "version": "4.2.1",
+    "version": "5.0.0",
     "description": "A lightweight translation library",
     "main": "l10n",
     "scripts": {
@@ -25,10 +25,12 @@
         "url": "git+https://github.com/tuicom/l10n.git"
     },
     "author": "TUI Deutschland GmbH",
-    "contributors": [{
-        "name": "Alexander Günsche",
-        "email": "alexander.guensche@tui.de"
-    }],
+    "contributors": [
+        {
+            "name": "Alexander Günsche",
+            "email": "alexander.guensche@tui.de"
+        }
+    ],
     "bin": {
         "l10n": "./bin/l10n.php"
     },
@@ -59,10 +61,14 @@
         "env": {
             "test": {
                 "presets": [
-                    [ "@babel/env" ]
+                    [
+                        "@babel/env"
+                    ]
                 ],
                 "plugins": [
-                    [ "@babel/plugin-transform-modules-commonjs" ]
+                    [
+                        "@babel/plugin-transform-modules-commonjs"
+                    ]
                 ]
             }
         }
