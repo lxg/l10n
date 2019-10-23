@@ -31,9 +31,6 @@
             "email": "alexander.guensche@tui.de"
         }
     ],
-    "bin": {
-        "l10n": "./bin/l10n.php"
-    },
     "license": "ISC",
     "devDependencies": {
         "@babel/cli": "^7.4.4",
