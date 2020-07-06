@@ -11,9 +11,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var L10n =
-/*#__PURE__*/
-function () {
+var L10n = /*#__PURE__*/function () {
   function L10n(translations) {
     var _this = this;
 
@@ -90,7 +88,7 @@ function () {
   }, {
     key: "x",
     value: function x(context, msgid) {
-      return this.getEntry(context + "\x04" + msgid) || msgid;
+      return this.getEntry("".concat(context, "\x04").concat(msgid)) || msgid;
     }
     /**
      * Translates a pluralized string in a certain context into the given locale.
