@@ -22,11 +22,11 @@ It also has a few additional advantages:
 This package is available via NPM:
 
 ```shell
-npm install --save @tuicom/l10n
-npm install --save-dev @tuicom/l10n-tools
+npm install --save @lxg/l10n
+npm install --save-dev @lxg/l10n-tools
 ```
 
-(For more about `@tuicom/l10n-tools` see below.)
+(For more about `@lxg/l10n-tools` see below.)
 
 ## Usage
 
@@ -36,10 +36,10 @@ There are two ways to use the library in your own code: Either by using a bundle
 
 ```js
 // Bundler (NOTE: must support import/export syntax)
-import L10n from "@tuicom/l10n/l10n"
+import L10n from "@lxg/l10n/l10n"
 
 // Pure ES6 (exact path depends on your file’s location)
-import L10n from "./node_modules/@tuicom/l10n/l10n.mjs"
+import L10n from "./node_modules/@lxg/l10n/l10n.mjs"
 ```
 
 ### Initialization
@@ -143,7 +143,7 @@ NOTE: The tool does *not* fill existing, but incomplete catalogs with entries fr
 
 ## Extracting message strings and generating translation tables
 
-The [tuicom/l10n-tools library](https://github.com/tuicom/l10n-tools) provides a set of tools to extract translatable string from your code base into `.po` files and, after the `.po` files have been translated, will generate a JSON translations table.
+The [@lxg/l10n-tools library](https://github.com/lxg/l10n-tools) provides a set of tools to extract translatable string from your code base into `.po` files and, after the `.po` files have been translated, will generate a JSON translations table.
 
 The `npx l10n` tool is the CLI frontend to the catalog manager.
 
@@ -251,8 +251,8 @@ If you’re working with dates, you will face two additional problems:
 This is solved by the `date.js` module. Consider the following example, especially how the functions are arranged to produce the desired output:
 
 ```js
-import l10n from "@tuicom/l10n/l10n"
-import date from "@tuicom/l10n/date"
+import l10n from "@lxg/l10n/l10n"
+import date from "@lxg/l10n/date"
 import translations from "./l10n/translations.json"
 
 const l10n = new L10n(translations, "de-DE")

@@ -60,7 +60,7 @@ export default class L10n {
      * @return string the translated message, or, if there is no translation, the original message
      */
     x(context, msgid) {
-        return this.getEntry(context + "\u0004" + msgid) || msgid
+        return this.getEntry(`${context}\u0004${msgid}`) || msgid
     }
 
     /**

@@ -1,6 +1,6 @@
 {
-    "name": "@tuicom/l10n",
-    "version": "5.0.2",
+    "name": "@lxg/l10n",
+    "version": "1.0.2",
     "description": "A lightweight translation library",
     "main": "l10n",
     "scripts": {
@@ -22,15 +22,12 @@
     ],
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/tuicom/l10n.git"
+        "url": "git+https://github.com/lxg/l10n.git"
     },
-    "author": "TUI Deutschland GmbH",
-    "contributors": [
-        {
-            "name": "Alexander Günsche",
-            "email": "alexander.guensche@tui.de"
-        }
-    ],
+    "author": {
+        "name": "Alexander Günsche",
+        "url" : "https://lxg.de/"
+    },
     "license": "ISC",
     "devDependencies": {
         "@babel/cli": "^7.4.4",
