@@ -26,16 +26,16 @@
     },
     "author": {
         "name": "Alexander Günsche",
-        "url" : "https://lxg.de/"
+        "url": "https://lxg.de/"
     },
     "license": "ISC",
     "devDependencies": {
-        "@babel/cli": "^7.4.4",
-        "@babel/core": "^7.4.5",
-        "@babel/plugin-transform-modules-commonjs": "^7.6.0",
-        "@babel/preset-env": "^7.4.5",
+        "@babel/cli": "^7.10.4",
+        "@babel/core": "^7.10.4",
+        "@babel/plugin-transform-modules-commonjs": "^7.10.4",
+        "@babel/preset-env": "^7.10.4",
         "eslint": "^5.16.0",
-        "eslint-plugin-jest": "^22.17.0",
+        "eslint-plugin-jest": "^22.21.0",
         "jest": "^24.9.0"
     },
     "jest": {
