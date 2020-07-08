@@ -10,6 +10,10 @@
         "test:coverage": "jest --coverage",
         "build": "for script in $(ls *.mjs | grep -v test.mjs | sed -e 's|.mjs||g'); do npx babel $script.mjs --presets=@babel/env > $script.js; npx eslint $script.js --fix; done"
     },
+    "files": [
+        "*.js",
+        "*.mjs"
+    ],
     "keywords": [
         "internationalisation",
         "i18n",
