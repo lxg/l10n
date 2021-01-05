@@ -1,6 +1,6 @@
 {
     "name": "@lxg/l10n",
-    "version": "1.0.6",
+    "version": "1.1.0",
     "description": "A lightweight translation library",
     "main": "l10n",
     "scripts": {
