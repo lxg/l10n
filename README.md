@@ -6,7 +6,7 @@ The killer feature of this library however, is the [extraction tool](https://git
 
 Under the hood, the library uses the [Gettext .po files](https://en.wikipedia.org/wiki/Gettext) as an intermediate format which you or your translators can edit. From those human-readable .po files, the actual size-optimised dictionaries are generated.
 
-- Super small footprint: only 1.3 kB compressed/minified
+- Super small footprint: only 660 bytes (yes, bytes!) minified, ~370 bytes compressed on the wire
 - Support for on-the-fly locale switching
 - Great pluralisation support, in almost all languages worldwide.
 - Support for message contexts (e.g. “amount” has different meanings, which translate to different words in other languages)
@@ -14,8 +14,6 @@ Under the hood, the library uses the [Gettext .po files](https://en.wikipedia.or
 - The `.po` catalog format is widely supported, so you will always find translators, tools and services which can work with your catalog files.
 
 ## Usage
-
-⚠ NOTE: You may find the setup a bit cumbersome at first. However, give it a chance – once you get it running, you will never want to use anything else again.
 
 ### 1. Installation
 
