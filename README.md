@@ -87,7 +87,7 @@ There are three translation functions you can use in your code:
 To fill the placeholders in translations, especially pluralisations, you can use something like `sprintf()`. This is not part of the l10n library, but you can use the following super-simple `sprintf()` implementation:
 
 ```js
-let sprintf = (format, ...args) => {
+const sprintf = (format, ...args) => {
     let i = 0;
     return format.replace(/%s/g, () => args[i++]);
 }
