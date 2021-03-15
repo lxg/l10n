@@ -1,28 +1,41 @@
-import L10n from "./l10n.mjs"
+import L10n from "../src/l10n.js"
 
 test('constructor', () => {
     const l10n = new L10n({
         "de-DE": {
-            "abc": "xyz"
+            p: '(n != 1)',
+            t: {
+                "abc": "xyz"
+            }
         }
     }, "de-AT")
 
     expect(l10n.locale).toBe("de-AT")
-    expect(l10n.language).toBe("de")
-    expect(l10n.catalogs["de-DE"]).toEqual({"abc": "xyz"})
-    expect(l10n.fallbacks).toEqual({"de" : "de-DE"})
+    expect(l10n._language).toBe("de")
+    expect(l10n._catalogs["de-DE"]).toEqual({
+        "abc": "xyz"
+    })
+    expect(l10n._fallbacks).toEqual({
+        "de": "de-DE"
+    })
 })
 
 // our permanent instance
 const l10n = new L10n({
     "de-DE": {
-        "Hello World": "Hallo Welt",
-        "count\u0004Amount": "Menge",
-        "money\u0004Amount": "Betrag",
-        "One element": ["Ein Element", "%s Elemente"]
+        p: '(n != 1)',
+        t: {
+            "Hello World": "Hallo Welt",
+            "count\u0004Amount": "Menge",
+            "money\u0004Amount": "Betrag",
+            "One element": ["Ein Element", "%s Elemente"]
+        }
     },
     "fr-FR": {
-        "Hello World": "Bonjour tout le monde"
+        p: '(n != 1)',
+        t: {
+            "Hello World": "Bonjour tout le monde"
+        }
     }
 }, "de-DE")
 
