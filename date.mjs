@@ -1,92 +1,114 @@
-import l10n from "./l10n.mjs";
+// import L10n from "./l10n"
 
-/**
- * Formats a string like "Y-m-d" or "j. M Y" to a real date expression. Use with l10n.t() to create the localized date format first.
- *
- * @param  {object} an instance of Date()
- * @param  {string} the date pattern
- * @return {string} the real date expression
- */
-export default function date() {}
-
-date.fmt = (dateObj, string) => string
-    .split("")
-    .map(char => dateFn[char] ? dateFn[char](dateObj) : char)
-    .join("");
-
-/**
- * Returns a list of translated month names
- *
- * @return {array} month names
- */
-date.getMonths = () => [
-    l10n.t("January"), l10n.t("February"), l10n.t("March"),
-    l10n.t("April"), l10n.t("May"), l10n.t("June"),
-    l10n.t("July"), l10n.t("August"), l10n.t("September"),
-    l10n.t("October"), l10n.t("November"), l10n.t("December")
-];
-
-/**
- * Returns a list of translated month name abbreviations
- *
- * @return {array} month names
- */
-date.getMonthsShort = () => [
-    l10n.t("Jan"), l10n.t("Feb"), l10n.t("Mar"), l10n.t("Apr"),
-    l10n.t("May"), l10n.t("Jun"), l10n.t("Jul"), l10n.t("Aug"),
-    l10n.t("Sep"), l10n.t("Oct"), l10n.t("Nov"), l10n.t("Dec")
-];
-
-/**
- * Returns a list of translated weekday names
- *
- * @return {array} weekday names
- */
-date.getWeekdays = () => [
-    l10n.t("Sunday"), l10n.t("Monday"), l10n.t("Tuesday"),
-    l10n.t("Wednesday"), l10n.t("Thursday"),
-    l10n.t("Friday"), l10n.t("Saturday")
-];
-
-/**
- * Returns a list of translated weekday name abbreviations
- *
- * @return {array} weekday names
- */
-date.getWeekdaysShort = () => [
-    l10n.t("Sun"), l10n.t("Mon"), l10n.t("Tue"), l10n.t("Wed"),
-    l10n.t("Thu"), l10n.t("Fri"), l10n.t("Sat")
-];
-
-/**
- * Gives you the first day of the calendar week
- *
- * @return {integer} 0 for Sunday, 1 for Monday
- */
-date.getFirstDayOfWeek = () => parseInt(l10n.x("first day of week; 0: Sunday, 1: Monday", "0"));
-
-
-
-let pad = num => num.toString().padStart(2, "0");
-
-let dateFn =
+export default class Date
 {
-    j : dateObj => dateObj.getDate().toString(), // Day of the month without leading zeros, 1 to 31
-    d : dateObj => pad(dateFn.j(dateObj)), // Day of the month, 2 digits with leading zeros, 01 to 31
+    constructor(l10n) {
+        this._l10n = l10n
+    }
 
-    w : dateObj => dateObj.getDay().toString(), // Numeric representation of the day of the week, 0 (for Sunday) through 6 (for Saturday)
-    D : dateObj => date.getWeekdaysShort()[dateObj.getDay()], // A textual representation of a day, three letters, Mon through Sun
-    l : dateObj => date.getWeekdays()[dateObj.getDay()], // A full textual representation of the day of the week Sunday through Saturday
+    /**
+     * Formats a string like "Y-m-d" or "j. M Y" to a real date expression. Use with l10n.t() to create the localized date format first.
+     *
+     * @param {object} an instance of Date()
+     * @param {string} the date pattern (like "Y-m-d" or "j. M Y")
+     */
+    fmt(dateObj, string) {
+        return string
+            .split("")
+            .map(char => dateFn[char] ? dateFn[char](dateObj) : char)
+            .join("")
+    }
 
-    F : dateObj => date.getMonths()[dateObj.getMonth()], // A full textual representation of a month, January through December
-    M : dateObj => date.getMonthsShort()[dateObj.getMonth()], // A short textual representation of a month, three letters, Jan through Dec
-    n : dateObj => (dateObj.getMonth() + 1).toString(), // Numeric representation of a month, without leading zeros, 1 through 12
-    m : dateObj => pad(dateFn.n(dateObj)), // Numeric representation of a month, with leading zeros, 01 through 12
+    /**
+     * Returns a list of translated month names
+     *
+     * @return {array} month names
+     */
+    getMonths() {
+        return [
+            this._l10n.x("l10n", "January"), this._l10n.x("l10n", "February"), this._l10n.x("l10n", "March"),
+            this._l10n.x("l10n", "April"), this._l10n.x("l10n", "May"), this._l10n.x("l10n", "June"),
+            this._l10n.x("l10n", "July"), this._l10n.x("l10n", "August"), this._l10n.x("l10n", "September"),
+            this._l10n.x("l10n", "October"), this._l10n.x("l10n", "November"), this._l10n.x("l10n", "December")
+        ];
+    }
+    /**
+     * Returns a list of translated month name abbreviations
+     *
+     * @return {array} month names
+     */
+    getMonthsShort() {
+        return [
+            this._l10n.x("l10n", "Jan"), this._l10n.x("l10n", "Feb"), this._l10n.x("l10n", "Mar"), this._l10n.x("l10n", "Apr"),
+            this._l10n.x("l10n", "May"), this._l10n.x("l10n", "Jun"), this._l10n.x("l10n", "Jul"), this._l10n.x("l10n", "Aug"),
+            this._l10n.x("l10n", "Sep"), this._l10n.x("l10n", "Oct"), this._l10n.x("l10n", "Nov"), this._l10n.x("l10n", "Dec")
+        ]
+    }
+    /**
+     * Returns a list of translated weekday names
+     *
+     * @return {array} weekday names
+     */
+    getWeekdays() {
+        const weekdays = [
+            this._l10n.x("l10n", "Sunday"), this._l10n.x("l10n", "Monday"), this._l10n.x("l10n", "Tuesday"),
+            this._l10n.x("l10n", "Wednesday"), this._l10n.x("l10n", "Thursday"),
+            this._l10n.x("l10n", "Friday"), this._l10n.x("l10n", "Saturday")
+        ]
 
-    Y : dateObj => dateObj.getFullYear().toString(), // A full numeric representation of a year, 1999 or 2003
-    y : dateObj => dateFn.Y(dateObj).substr(2), // A two digit representation of a year, 99 or 03
+        // if first weekday is Monday, move Sunday to the end
+        this.getFirstDayOfWeek() &&
+            weekdays.push(weekdays.shift())
 
-    H : dateObj => pad(dateObj.getHours()), // 24-hour format of an hour with leading zeros, 00 through 23
-    i : dateObj => pad(dateObj.getMinutes()), // Minutes with leading zeros, 00 to 59
-    s : dateObj => pad(dateObj.getSeconds()) // Seconds, with leading zeros, 00 through 59
-};
+        return weekdays
+    }
+    /**
+     * Returns a list of translated weekday name abbreviations
+     *
+     * @return {array} weekday names
+     */
+    getWeekdaysShort() {
+        const weekdays = [
+            this._l10n.x("l10n", "Sun"), this._l10n.x("l10n", "Mon"), this._l10n.x("l10n", "Tue"), this._l10n.x("l10n", "Wed"),
+            this._l10n.x("l10n", "Thu"), this._l10n.x("l10n", "Fri"), this._l10n.x("l10n", "Sat")
+        ]
+
+        // if first weekday is Monday, move Sunday to the end
+        this.getFirstDayOfWeek() &&
+            weekdays.push(weekdays.shift())
+
+        return weekdays
+    }
+
+    /**
+     * Gives you the first day of the calendar week
+     *
+     * @return {integer} 0 for Sunday, 1 for Monday
+     */
+    getFirstDayOfWeek() {
+        return parseInt(this._l10n.x("l10n", "1"))
+    }
+}
+
+const pad = num => num.toString().padStart(2, "0")
+
+const dateFn = {
+    j: dateObj => dateObj.getDate().toString(), // Day of the month without leading zeros, 1 to 31
+    d: dateObj => pad(dateFn.j(dateObj)), // Day of the month, 2 digits with leading zeros, 01 to 31
+
+    w: dateObj => dateObj.getDay().toString(), // Numeric representation of the day of the week, 0 (for Sunday) through 6 (for Saturday)
+    D: dateObj => this.getWeekdaysShort()[dateObj.getDay()], // A textual representation of a day, three letters, Mon through Sun
+    l: dateObj => this.getWeekdays()[dateObj.getDay()], // A full textual representation of the day of the week Sunday through Saturday
+
+    F: dateObj => this.getMonths()[dateObj.getMonth()], // A full textual representation of a month, January through December
+    M: dateObj => this.getMonthsShort()[dateObj.getMonth()], // A short textual representation of a month, three letters, Jan through Dec
+    n: dateObj => (dateObj.getMonth() + 1).toString(), // Numeric representation of a month, without leading zeros, 1 through 12
+    m: dateObj => pad(dateFn.n(dateObj)), // Numeric representation of a month, with leading zeros, 01 through 12
+
+    Y: dateObj => dateObj.getFullYear().toString(), // A full numeric representation of a year, 1999 or 2003
+    y: dateObj => dateFn.Y(dateObj).substr(2), // A two digit representation of a year, 99 or 03
+
+    H: dateObj => pad(dateObj.getHours()), // 24-hour format of an hour with leading zeros, 00 through 23
+    i: dateObj => pad(dateObj.getMinutes()), // Minutes with leading zeros, 00 to 59
+    s: dateObj => pad(dateObj.getSeconds()) // Seconds, with leading zeros, 00 through 59
+}

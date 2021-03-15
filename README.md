@@ -1,13 +1,13 @@
 # l10n – a versatile and super-lightweight localisation library
 
-With this library, you can build multilingual frontend application with very little overhead. It weights only ~1.5kb minified and compressed and has a lot of nice features.
+With this library, you can build multilingual frontend application with very little overhead. It weights only ~370 bytes (yes, bytes!) minified and compressed and has a lot of nice features.
 
 The killer feature of this library however, is the [extraction tool](https://github.com/lxg/l10n-tools) which will scan your source code for translatable messages merge them into your dictionary. Of course, it will retain existing translations, so you will never again have to manually extract and merge your translations!
 
 Under the hood, the library uses the [Gettext .po files](https://en.wikipedia.org/wiki/Gettext) as an intermediate format which you or your translators can edit. From those human-readable .po files, the actual size-optimised dictionaries are generated.
 
-- Super small footprint: only 660 bytes (yes, bytes!) minified, ~370 bytes compressed on the wire
-- Support for on-the-fly locale switching
+- Super small footprint: only 660 bytes (yes, bytes!) minified, ~370 bytes compressed on the wire (only l10n.mjs, without date.mjs).
+- Support for on-the-fly locale switching.
 - Great pluralisation support, in almost all languages worldwide.
 - Support for message contexts (e.g. “amount” has different meanings, which translate to different words in other languages)
 - By using the original message as catalog ID, you always have an English fallback, where a translation doesn’t exist.
@@ -132,21 +132,22 @@ const l10n = new L10n(translations, "de-DE")
 
 NOTE: If other modules/classes also need translations, you can either pass the `l10n` instance to them, or load the library and the JSON dictionary there again. Keep in mind that the latter might increase the size of your build artifact.
 
-## The `date.js` tool
+## The `date.mjs` tool
 
 If you’re working with dates, you will face two additional problems:
 
 1. You want the structure of the date expression to match the locale (e.g. `Y-m-d` in English and `d.m.Y` in German),
 2. You want month and weekday names to be translated *within* such an expression.
 
-This is solved by the `date.js` module. Consider the following example, especially how the functions are arranged to produce the desired output:
+This is solved by the `date.mjs` module. Consider the following example, especially how the functions are arranged to produce the desired output:
 
 ```js
-import l10n from "@lxg/l10n"
-import date from "@lxg/l10n/date"
+import L10n from "@lxg/l10n"
+import L10nDate from "@lxg/l10n/date"
 import translations from "./l10n/translations.json"
 
 const l10n = new L10n(translations, "de-DE")
+const l10nDate = new L10nDate(l10n) // important to inject the instance that 
 
 // English: Today is April 23, 2019.
 // German: Heute ist der 23. April 2019.
