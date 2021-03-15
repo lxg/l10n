@@ -44,7 +44,7 @@ var Date = /*#__PURE__*/function () {
   }, {
     key: "getMonths",
     value: function getMonths() {
-      return [this._l10n.x("l10n\x04January"), this._l10n.x("l10n\x04February"), this._l10n.x("l10n\x04March"), this._l10n.x("l10n\x04April"), this._l10n.x("l10n\x04May"), this._l10n.x("l10n\x04June"), this._l10n.x("l10n\x04July"), this._l10n.x("l10n\x04August"), this._l10n.x("l10n\x04September"), this._l10n.x("l10n\x04October"), this._l10n.x("l10n\x04November"), this._l10n.x("l10n\x04December")];
+      return [this._l10n.x("l10n", "January"), this._l10n.x("l10n", "February"), this._l10n.x("l10n", "March"), this._l10n.x("l10n", "April"), this._l10n.x("l10n", "May"), this._l10n.x("l10n", "June"), this._l10n.x("l10n", "July"), this._l10n.x("l10n", "August"), this._l10n.x("l10n", "September"), this._l10n.x("l10n", "October"), this._l10n.x("l10n", "November"), this._l10n.x("l10n", "December")];
     }
     /**
      * Returns a list of translated month name abbreviations
@@ -55,7 +55,7 @@ var Date = /*#__PURE__*/function () {
   }, {
     key: "getMonthsShort",
     value: function getMonthsShort() {
-      return [this._l10n.x("l10n\x04Jan"), this._l10n.x("l10n\x04Feb"), this._l10n.x("l10n\x04Mar"), this._l10n.x("l10n\x04Apr"), this._l10n.x("l10n\x04May"), this._l10n.x("l10n\x04Jun"), this._l10n.x("l10n\x04Jul"), this._l10n.x("l10n\x04Aug"), this._l10n.x("l10n\x04Sep"), this._l10n.x("l10n\x04Oct"), this._l10n.x("l10n\x04Nov"), this._l10n.x("l10n\x04Dec")];
+      return [this._l10n.x("l10n", "Jan"), this._l10n.x("l10n", "Feb"), this._l10n.x("l10n", "Mar"), this._l10n.x("l10n", "Apr"), this._l10n.x("l10n", "May"), this._l10n.x("l10n", "Jun"), this._l10n.x("l10n", "Jul"), this._l10n.x("l10n", "Aug"), this._l10n.x("l10n", "Sep"), this._l10n.x("l10n", "Oct"), this._l10n.x("l10n", "Nov"), this._l10n.x("l10n", "Dec")];
     }
     /**
      * Returns a list of translated weekday names
@@ -66,7 +66,7 @@ var Date = /*#__PURE__*/function () {
   }, {
     key: "getWeekdays",
     value: function getWeekdays() {
-      var weekdays = [this._l10n.x("l10n\x04Sunday"), this._l10n.x("l10n\x04Monday"), this._l10n.x("l10n\x04Tuesday"), this._l10n.x("l10n\x04Wednesday"), this._l10n.x("l10n\x04Thursday"), this._l10n.x("l10n\x04Friday"), this._l10n.x("l10n\x04Saturday")]; // if first weekday is Monday, move Sunday to the end
+      var weekdays = [this._l10n.x("l10n", "Sunday"), this._l10n.x("l10n", "Monday"), this._l10n.x("l10n", "Tuesday"), this._l10n.x("l10n", "Wednesday"), this._l10n.x("l10n", "Thursday"), this._l10n.x("l10n", "Friday"), this._l10n.x("l10n", "Saturday")]; // if first weekday is Monday, move Sunday to the end
 
       this.getFirstDayOfWeek() && weekdays.push(weekdays.shift());
       return weekdays;
@@ -80,7 +80,7 @@ var Date = /*#__PURE__*/function () {
   }, {
     key: "getWeekdaysShort",
     value: function getWeekdaysShort() {
-      var weekdays = [this._l10n.x("l10n\x04Sun"), this._l10n.x("l10n\x04Mon"), this._l10n.x("l10n\x04Tue"), this._l10n.x("l10n\x04Wed"), this._l10n.x("l10n\x04Thu"), this._l10n.x("l10n\x04Fri"), this._l10n.x("l10n\x04Sat")]; // if first weekday is Monday, move Sunday to the end
+      var weekdays = [this._l10n.x("l10n", "Sun"), this._l10n.x("l10n", "Mon"), this._l10n.x("l10n", "Tue"), this._l10n.x("l10n", "Wed"), this._l10n.x("l10n", "Thu"), this._l10n.x("l10n", "Fri"), this._l10n.x("l10n", "Sat")]; // if first weekday is Monday, move Sunday to the end
 
       this.getFirstDayOfWeek() && weekdays.push(weekdays.shift());
       return weekdays;
@@ -94,7 +94,7 @@ var Date = /*#__PURE__*/function () {
   }, {
     key: "getFirstDayOfWeek",
     value: function getFirstDayOfWeek() {
-      return parseInt(this._l10n.x("first day of week; 0: Sunday, 1: Monday", "0"));
+      return parseInt(this._l10n.x("l10n", "1"));
     }
   }]);
 
