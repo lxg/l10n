@@ -13,10 +13,10 @@ export default class L10nDate
      */
     getMonths() {
         return [
-            this._l10n.x("l10n", "January"), this._l10n.x("l10n", "February"), this._l10n.x("l10n", "March"),
-            this._l10n.x("l10n", "April"), this._l10n.x("l10n", "May"), this._l10n.x("l10n", "June"),
-            this._l10n.x("l10n", "July"), this._l10n.x("l10n", "August"), this._l10n.x("l10n", "September"),
-            this._l10n.x("l10n", "October"), this._l10n.x("l10n", "November"), this._l10n.x("l10n", "December")
+            this._l10n.x("_", "January"), this._l10n.x("_", "February"), this._l10n.x("_", "March"),
+            this._l10n.x("_", "April"), this._l10n.x("_", "May"), this._l10n.x("_", "June"),
+            this._l10n.x("_", "July"), this._l10n.x("_", "August"), this._l10n.x("_", "September"),
+            this._l10n.x("_", "October"), this._l10n.x("_", "November"), this._l10n.x("_", "December")
         ];
     }
 
@@ -27,9 +27,9 @@ export default class L10nDate
      */
     getMonthsShort() {
         return [
-            this._l10n.x("l10n", "Jan"), this._l10n.x("l10n", "Feb"), this._l10n.x("l10n", "Mar"), this._l10n.x("l10n", "Apr"),
-            this._l10n.x("l10n", "May"), this._l10n.x("l10n", "Jun"), this._l10n.x("l10n", "Jul"), this._l10n.x("l10n", "Aug"),
-            this._l10n.x("l10n", "Sep"), this._l10n.x("l10n", "Oct"), this._l10n.x("l10n", "Nov"), this._l10n.x("l10n", "Dec")
+            this._l10n.x("_", "Jan"), this._l10n.x("_", "Feb"), this._l10n.x("_", "Mar"), this._l10n.x("_", "Apr"),
+            this._l10n.x("_", "May"), this._l10n.x("_", "Jun"), this._l10n.x("_", "Jul"), this._l10n.x("_", "Aug"),
+            this._l10n.x("_", "Sep"), this._l10n.x("_", "Oct"), this._l10n.x("_", "Nov"), this._l10n.x("_", "Dec")
         ]
     }
 
@@ -39,17 +39,11 @@ export default class L10nDate
      * @return {array} weekday names
      */
     getWeekdays() {
-        const weekdays = [
-            this._l10n.x("l10n", "Sunday"), this._l10n.x("l10n", "Monday"), this._l10n.x("l10n", "Tuesday"),
-            this._l10n.x("l10n", "Wednesday"), this._l10n.x("l10n", "Thursday"),
-            this._l10n.x("l10n", "Friday"), this._l10n.x("l10n", "Saturday")
+        return [
+            this._l10n.x("_", "Sunday"), this._l10n.x("_", "Monday"), this._l10n.x("_", "Tuesday"),
+            this._l10n.x("_", "Wednesday"), this._l10n.x("_", "Thursday"),
+            this._l10n.x("_", "Friday"), this._l10n.x("_", "Saturday")
         ]
-
-        // if first weekday is Monday, move Sunday to the end
-        this.getFirstDayOfWeek() &&
-            weekdays.push(weekdays.shift())
-
-        return weekdays
     }
 
     /**
@@ -58,25 +52,29 @@ export default class L10nDate
      * @return {array} weekday names
      */
     getWeekdaysShort() {
-        const weekdays = [
-            this._l10n.x("l10n", "Sun"), this._l10n.x("l10n", "Mon"), this._l10n.x("l10n", "Tue"), this._l10n.x("l10n", "Wed"),
-            this._l10n.x("l10n", "Thu"), this._l10n.x("l10n", "Fri"), this._l10n.x("l10n", "Sat")
+        return [
+            this._l10n.x("_", "Sun"), this._l10n.x("_", "Mon"), this._l10n.x("_", "Tue"), this._l10n.x("_", "Wed"),
+            this._l10n.x("_", "Thu"), this._l10n.x("_", "Fri"), this._l10n.x("_", "Sat")
         ]
-
-        // if first weekday is Monday, move Sunday to the end
-        this.getFirstDayOfWeek() &&
-            weekdays.push(weekdays.shift())
-
-        return weekdays
     }
 
     /**
      * Gives you the first day of the calendar week
      *
-     * @return {integer} 0 for Sunday, 1 for Monday
+     * @return {integer} 0 for Sunday, 1 for Monday, 5 for Friday, 6 for Saturday
      */
     getFirstDayOfWeek() {
-        return parseInt(this._l10n.x("l10n", "1"))
+        return parseInt(this._l10n.x("_", "1"))
+    }
+
+    /**
+     * Shifts the weekdays to the localized order based on the first day of the calendar week in the given locale
+     *
+     * @return Array the list of weekdays in the localized order
+     */
+    shiftWeekdays(weekdays) {
+        const day = this.getFirstDayOfWeek()
+        return weekdays.slice(day).concat(weekdays.slice(0, day))
     }
 }
 

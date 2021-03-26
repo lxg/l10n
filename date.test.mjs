@@ -8,43 +8,43 @@ const l10n = new L10n({
         t: {
           "l, d F Y": "l, d. F Y",
 
-          "l10n\u0004Mon": "Mo",
-          "l10n\u0004Tue": "Di",
-          "l10n\u0004Wed": "Mi",
-          "l10n\u0004Thu": "Do",
-          "l10n\u0004Fri": "Fr",
-          "l10n\u0004Sat": "Sa",
-          "l10n\u0004Sun": "So",
-          "l10n\u0004Monday": "Montag",
-          "l10n\u0004Tuesday": "Dienstag",
-          "l10n\u0004Wednesday": "Mittwoch",
-          "l10n\u0004Thursday": "Donnerstag",
-          "l10n\u0004Friday": "Freitag",
-          "l10n\u0004Saturday": "Samstag",
-          "l10n\u0004Sunday": "Sonntag",
-          "l10n\u0004Jan": "Jan",
-          "l10n\u0004Feb": "Feb",
-          "l10n\u0004Mar": "Mär",
-          "l10n\u0004Apr": "Apr",
-          "l10n\u0004May": "Mai",
-          "l10n\u0004Jun": "Jun",
-          "l10n\u0004Jul": "Jul",
-          "l10n\u0004Aug": "Aug",
-          "l10n\u0004Sep": "Sep",
-          "l10n\u0004Oct": "Okt",
-          "l10n\u0004Nov": "Nov",
-          "l10n\u0004Dec": "Dez",
-          "l10n\u0004January": "Januar",
-          "l10n\u0004February": "Februar",
-          "l10n\u0004March": "März",
-          "l10n\u0004April": "April",
-          "l10n\u0004June": "Juni",
-          "l10n\u0004July": "Juli",
-          "l10n\u0004August": "August",
-          "l10n\u0004September": "September",
-          "l10n\u0004October": "Oktober",
-          "l10n\u0004November": "November",
-          "l10n\u0004December": "Dezember"
+          "_\u0004Mon": "Mo",
+          "_\u0004Tue": "Di",
+          "_\u0004Wed": "Mi",
+          "_\u0004Thu": "Do",
+          "_\u0004Fri": "Fr",
+          "_\u0004Sat": "Sa",
+          "_\u0004Sun": "So",
+          "_\u0004Monday": "Montag",
+          "_\u0004Tuesday": "Dienstag",
+          "_\u0004Wednesday": "Mittwoch",
+          "_\u0004Thursday": "Donnerstag",
+          "_\u0004Friday": "Freitag",
+          "_\u0004Saturday": "Samstag",
+          "_\u0004Sunday": "Sonntag",
+          "_\u0004Jan": "Jan",
+          "_\u0004Feb": "Feb",
+          "_\u0004Mar": "Mär",
+          "_\u0004Apr": "Apr",
+          "_\u0004May": "Mai",
+          "_\u0004Jun": "Jun",
+          "_\u0004Jul": "Jul",
+          "_\u0004Aug": "Aug",
+          "_\u0004Sep": "Sep",
+          "_\u0004Oct": "Okt",
+          "_\u0004Nov": "Nov",
+          "_\u0004Dec": "Dez",
+          "_\u0004January": "Januar",
+          "_\u0004February": "Februar",
+          "_\u0004March": "März",
+          "_\u0004April": "April",
+          "_\u0004June": "Juni",
+          "_\u0004July": "Juli",
+          "_\u0004August": "August",
+          "_\u0004September": "September",
+          "_\u0004October": "Oktober",
+          "_\u0004November": "November",
+          "_\u0004December": "Dezember"
         }
     }
 }, "de-DE")
@@ -56,17 +56,23 @@ test('Test long weekday names', () => {
     const weekdays = l10nDate.getWeekdays()
 
     expect(weekdays).toBeInstanceOf(Array)
-    expect(weekdays[2]).toBe('Mittwoch')
-    expect(weekdays[5]).toBe('Samstag')
+    expect(weekdays[3]).toBe('Mittwoch')
+    expect(weekdays[6]).toBe('Samstag')
 })
-
 
 test('Test short weekday names', () => {
     const weekdays = l10nDate.getWeekdaysShort()
 
     expect(weekdays).toBeInstanceOf(Array)
-    expect(weekdays[2]).toBe('Mi')
-    expect(weekdays[5]).toBe('Sa')
+    expect(weekdays[3]).toBe('Mi')
+    expect(weekdays[6]).toBe('Sa')
+})
+
+test('Test weekday shifting', () => {
+    const weekdays = l10nDate.shiftWeekdays(l10nDate.getWeekdaysShort())
+    expect(weekdays).toBeInstanceOf(Array)
+    expect(weekdays[3]).toBe('Do')
+    expect(weekdays[6]).toBe('So')
 })
 
 test('Test long month names', () => {
@@ -87,5 +93,5 @@ test('Test short month names', () => {
 
 test('Test date formatting', () => {
     const date = new Date(1616786698000) // 2021-03-26T19:24:58.000Z
-    expect(dateFormat.fmt(date, l10n.t("l, d F Y"))).toBe('Samstag, 26. März 2021')
+    expect(dateFormat.fmt(date, l10n.t("l, d F Y"))).toBe('Freitag, 26. März 2021')
 })

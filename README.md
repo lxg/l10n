@@ -148,26 +148,30 @@ Consider the following example, especially how the functions are arranged to pro
 ```js
 import L10n from "@lxg/l10n"
 import L10nDate from "@lxg/l10n/date"
+import { L10nDateFormat } from "@lxg/l10n/date"
 import translations from "./l10n/translations.json"
 
 const l10n = new L10n(translations, "de-DE")
-const l10nDate = new L10nDate(l10n) // important to inject the instance that
+const l10nDate = new L10nDate(l10n)
+const l10nDateFormat = new L10nDateFormat(l10n)
 
-// English: Today is April 23, 2019.
-// German: Heute ist der 23. April 2019.
-sprintf(l10n.t("Today is %s."), date.fmt(new Date(2019, 3, 23), l10n.t("F j, Y")))
+// English: Today is April 23, 2021.
+// German: Heute ist der 23. April 2021.
+sprintf(l10n.t("Today is %s."), l10nDate.fmt(new Date(2021, 3, 23), l10n.t("F j, Y")))
 ```
 
-The `date.js` module also provides a few functions to get translated month/weekday names:
+The `date.mjs` module also provides a few functions to get translated month/weekday names:
 
-- **`date.getMonths()`**: Returns a list of month names in the current locale: “January”, “February”, …
-- **`date.getMonthsShort()`**: Returns a list of short month names in the current locale: “Jan”, “Feb”, …
-- **`date.getWeekdays()`**: Returns a list of weekday names in the current locale: “Monday”, “Tuesday”, …
-- **`date.getWeekdaysShort()`**: Returns a list of short weekday names in the current locale: “Mon”, “Tue”, …
+- **`l10nDate.getMonths()`**: Returns a list of month names in the current locale: “January”, “February”, …
+- **`l10nDate.getMonthsShort()`**: Returns a list of short month names in the current locale: “Jan”, “Feb”, …
+- **`l10nDate.getWeekdays()`**: Returns a list of weekday names in the current locale: “Monday”, “Tuesday”, …
+- **`l10nDate.getWeekdaysShort()`**: Returns a list of short weekday names in the current locale: “Mon”, “Tue”, …
+- **`l10nDate.getFirstDayOfWeek()`**: Returns the first day of the week, 0: Sunday, 1: Monday, 5: Friday, 6: Saturday
+- **`l10nDate.shiftWeekdays()`**: To be used together with one of the weekdays functions to get the localized order of days, e.g. `l10nDate.shiftWeekdays(l10nDate.getMonthsShort())`
 
 ### Config changes
 
-Translations of localised weekday/month names will be automatically added to your translations table, based on the locales you have configured, This is achieved by adding the `l10n:date:*` pseudo-paths to the config in your package.json file (make sure to only use the ones you need):
+Translations of localised weekday/month names will be automatically added to your translations table, based on the locales you have configured. This is achieved by adding the `l10n:date:*` pseudo-paths to the config in your package.json file (make sure to only use the ones you need):
 
 ```json
 {
@@ -175,6 +179,7 @@ Translations of localised weekday/month names will be automatically added to you
         "targets": {
             "l10n/translations.json": [
                 "src/*",
+                "l10n:date:firstday",
                 "l10n:date:months",
                 "l10n:date:monthsShort",
                 "l10n:date:days",
