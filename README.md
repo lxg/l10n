@@ -1,6 +1,6 @@
 # l10n – a versatile and super-lightweight localisation library
 
-With this library, you can build multilingual frontend application with very little overhead. It weights only ~370 bytes (yes, bytes!) minified and compressed and has a lot of nice features.
+With this library, you can build multilingual frontend application with very little overhead. It weights less than 1kB minified and compressed, and it has lots of nice features.
 
 The killer feature of this library however, is the [extraction tool](https://github.com/lxg/l10n-tools) which will scan your source code for translatable messages merge them into your dictionary. Of course, it will retain existing translations, so you will never again have to manually extract and merge your translations!
 
@@ -65,6 +65,8 @@ Or how about JSX/TSX?
 ```jsx
 <span>{l10n.t("Also works with JSX!")}</span>
 ```
+
+(However, please read the notes on JSX, TSX and other non-JS source formats on the l10n-tools documentation.)
 
 #### Translation Functions
 
@@ -139,7 +141,9 @@ If you’re working with dates, you will face two additional problems:
 1. You want the structure of the date expression to match the locale (e.g. `Y-m-d` in English and `d.m.Y` in German),
 2. You want month and weekday names to be translated *within* such an expression.
 
-This is solved by the `date.mjs` module. Consider the following example, especially how the functions are arranged to produce the desired output:
+This is solved by the `date.mjs` module.
+
+Consider the following example, especially how the functions are arranged to produce the desired output:
 
 ```js
 import L10n from "@lxg/l10n"
@@ -147,7 +151,7 @@ import L10nDate from "@lxg/l10n/date"
 import translations from "./l10n/translations.json"
 
 const l10n = new L10n(translations, "de-DE")
-const l10nDate = new L10nDate(l10n) // important to inject the instance that 
+const l10nDate = new L10nDate(l10n) // important to inject the instance that
 
 // English: Today is April 23, 2019.
 // German: Heute ist der 23. April 2019.
@@ -160,3 +164,23 @@ The `date.js` module also provides a few functions to get translated month/weekd
 - **`date.getMonthsShort()`**: Returns a list of short month names in the current locale: “Jan”, “Feb”, …
 - **`date.getWeekdays()`**: Returns a list of weekday names in the current locale: “Monday”, “Tuesday”, …
 - **`date.getWeekdaysShort()`**: Returns a list of short weekday names in the current locale: “Mon”, “Tue”, …
+
+### Config changes
+
+Translations of localised weekday/month names will be automatically added to your translations table, based on the locales you have configured, This is achieved by adding the `l10n:date:*` pseudo-paths to the config in your package.json file (make sure to only use the ones you need):
+
+```json
+{
+    "l10n": {
+        "targets": {
+            "l10n/translations.json": [
+                "src/*",
+                "l10n:date:months",
+                "l10n:date:monthsShort",
+                "l10n:date:days",
+                "l10n:date:daysShort"
+            ]
+        }
+    }
+}
+```
