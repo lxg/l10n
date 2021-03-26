@@ -1,4 +1,4 @@
-import L10n from "../src/l10n.js"
+import L10n from "./l10n.mjs"
 
 test('constructor', () => {
     const l10n = new L10n({
