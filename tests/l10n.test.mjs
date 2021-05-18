@@ -1,4 +1,4 @@
-import L10n from "./l10n.mjs"
+import L10n from "../src/l10n.mjs"
 
 test('constructor', () => {
     const l10n = new L10n({
@@ -10,14 +10,7 @@ test('constructor', () => {
         }
     }, "de-AT")
 
-    expect(l10n.locale).toBe("de-AT")
-    expect(l10n._language).toBe("de")
-    expect(l10n._catalogs["de-DE"]).toEqual({
-        "abc": "xyz"
-    })
-    expect(l10n._fallbacks).toEqual({
-        "de": "de-DE"
-    })
+    expect(l10n.getLocale()).toBe("de-AT")
 })
 
 // our permanent instance
@@ -41,7 +34,6 @@ const l10n = new L10n({
 
 test('Test setting and getting locale', () => {
     l10n.setLocale("en-GB")
-    expect(l10n.locale).toBe("en-GB")
     expect(l10n.getLocale()).toBe("en-GB")
 })
 

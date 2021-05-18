@@ -12,7 +12,7 @@ export default class L10n {
             this._fallbacks[lang] = loc
 
             /*jshint evil:true */
-            _pl[lang] = _pl[lang] || new Function("n", `return (${translations[loc].p}) | 0`);
+            _pl[lang] = _pl[lang] || new Function("n", `return (${translations[loc].p}) | 0`)
         })
     }
 
@@ -22,7 +22,7 @@ export default class L10n {
      * @param string locale
      */
     setLocale(locale) {
-        this.locale = locale
+        this._locale = locale
         this._language = locale.substr(0, 2)
     }
 
@@ -32,7 +32,7 @@ export default class L10n {
      * @return string current locale
      */
     getLocale() {
-        return this.locale
+        return this._locale
     }
 
     /**
@@ -91,8 +91,8 @@ export default class L10n {
     _getEntry(msgid) {
         let key
 
-        if (this._catalogs[this.locale])
-            key = this.locale
+        if (this._catalogs[this._locale])
+            key = this._locale
 
         else if (this._catalogs[this._fallbacks[this._language]])
             key = this._fallbacks[this._language]

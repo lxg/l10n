@@ -1,6 +1,5 @@
-import L10n from "./l10n.mjs"
-import L10nDate from "./date.mjs"
-import { L10nDateFormat } from "./date.mjs"
+import L10n from "../src/l10n.mjs"
+import L10nDate, { L10nDateFormat } from "../src/date.mjs"
 
 const l10n = new L10n({
     "de-DE": {

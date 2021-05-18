@@ -2,17 +2,21 @@
     "name": "@lxg/l10n",
     "version": "1.4.0",
     "description": "A lightweight translation library",
-    "main": "l10n",
+    "type": "module",
+    "main": "dist/l10n.mjs",
+    "exports": {
+        ".": "dist/l10n.mjs",
+        "./date": "dist/date.mjs"
+    },
     "scripts": {
         "lint": "for script in $(ls *.mjs | grep -v test.mjs); do npx eslint $script; done",
         "lint:fix": "for script in $(ls *.mjs | grep -v test.mjs); do npx eslint $script --fix; done",
-        "test": "jest",
-        "test:coverage": "jest --coverage",
-        "build": "for script in $(ls *.mjs | grep -v test.mjs | sed -e 's|.mjs||g'); do npx eslint $script.js --fix; done"
+        "test": "node --experimental-vm-modules node_modules/.bin/jest",
+        "build": "npx rollup -c --environment BUILD:production"
     },
     "files": [
-        "l10n.mjs",
-        "date.mjs"
+        "dist/l10n.mjs",
+        "dist/date.mjs"
     ],
     "keywords": [
         "internationalisation",
@@ -36,12 +40,13 @@
     "devDependencies": {
         "eslint": "^7.26.0",
         "eslint-plugin-jest": "^24.3.6",
-        "jest": "^26.6.3"
+        "jest": "^26.6.3",
+        "rollup": "^2.26.5",
+        "rollup-plugin-terser": "^7.0.2"
     },
     "jest": {
         "testMatch": [
-            "**/__tests__/**/*.?mjs",
-            "**/?(*.)(spec|test).?mjs"
+            "**/tests/*.mjs"
         ],
         "moduleFileExtensions": [
             "js",

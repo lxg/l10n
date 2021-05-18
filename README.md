@@ -29,11 +29,7 @@ npm install --save-dev @lxg/l10n-tools
 First, import the library into your application:
 
 ```js
-// as ESmodule
 import L10n from "@lxg/l10n"
-
-// as CommonJS
-const L10n = require("@lxg/l10n").default
 ```
 
 Now you can create an instance of your translator:
@@ -119,11 +115,8 @@ At this point you should have generated your JSON dictionary with the catalog ma
 Loading the JSON can be a bit tricky, depending on the tools you have at hand. The easiest way is to use a bundler like Parcel or Rollup. It lets you import the JSON file synchronously, just like a JS file:
 
 ```js
-// as an ESmodule, may require a plugin for your bundler
+// as an ESmodule, may require a plugin for your bundler (e.g. @rollup/plugin-json)
 import translations from "./l10n/translations.json"
-
-// as CommonJS
-const translations = require("./l10n/translations.json")
 ```
 
 Now you can pass the dictionary to the `L10n` constructor as the first parameter:
@@ -147,8 +140,8 @@ Consider the following example, especially how the functions are arranged to pro
 
 ```js
 import L10n from "@lxg/l10n"
-import L10nDate from "@lxg/l10n/date"
-import { L10nDateFormat } from "@lxg/l10n/date"
+import L10nDate, { L10nDateFormat }  from "@lxg/l10n/date"
+import from "@lxg/l10n/date"
 import translations from "./l10n/translations.json"
 
 const l10n = new L10n(translations, "de-DE")
