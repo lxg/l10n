@@ -8,6 +8,9 @@
         ".": "dist/l10n.mjs",
         "./date": "dist/date.mjs"
     },
+    "bin": {
+        "l10n": "tools/generate.mjs"
+    },
     "scripts": {
         "lint": "for script in $(ls *.mjs | grep -v test.mjs); do npx eslint $script; done",
         "lint:fix": "for script in $(ls *.mjs | grep -v test.mjs); do npx eslint $script --fix; done",
@@ -15,8 +18,9 @@
         "build": "npx rollup -c --environment BUILD:production"
     },
     "files": [
-        "dist/l10n.mjs",
-        "dist/date.mjs"
+        "dist/*",
+        "tools/*",
+        "!tools/cldr.mjs"
     ],
     "keywords": [
         "internationalisation",
@@ -37,7 +41,16 @@
         "url": "https://lxg.de/"
     },
     "license": "ISC",
+    "dependencies": {
+        "acorn-loose": "^7.1.0",
+        "acorn-walk": "^7.2.0",
+        "ajv": "^6.12.6",
+        "fast-glob": "^3.2.4",
+        "gettext-parser": "^4.0.4"
+    },
     "devDependencies": {
+        "cldr-core": "^38.1.0",
+        "cldr-dates-modern": "^38.1.0",
         "eslint": "^7.26.0",
         "eslint-plugin-jest": "^24.3.6",
         "jest": "^26.6.3",
