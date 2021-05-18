@@ -6,7 +6,7 @@
     "main": "dist/l10n.mjs",
     "exports": {
         ".": "dist/l10n.mjs",
-        "./date": "dist/date.mjs"
+        "./date": "./dist/date.mjs"
     },
     "bin": {
         "l10n": "tools/generate.mjs"
