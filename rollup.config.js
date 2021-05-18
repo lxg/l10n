@@ -1,7 +1,7 @@
 import { terser } from 'rollup-plugin-terser'
 
 export default ['l10n', 'date'].map(name => ({
-    input: `${name}.mjs`,
+    input: `src/${name}.mjs`,
     output: {
         file: `dist/${name}.mjs`
     },
