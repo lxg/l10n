@@ -8,7 +8,7 @@ release-major:
 	@$(call release,major)
 
 define release
-	test -z "$(shell git status --short)" && npm run build && (git commit -m "creating dist files" *.js || :)
+	test -z "$(shell git status --short)" && npm run build && (git commit -m "creating dist files" dist/ || :)
 	npm version $(1) -m 'release v%s'
 	git push --tags origin HEAD:master
 	npm publish --access public
