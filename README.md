@@ -2,7 +2,7 @@
 
 With this library, you can build multilingual frontend application with very little overhead. It weights less than 1kB minified and compressed, and it has lots of nice features.
 
-The killer feature of this library however, is the [extraction tool](https://github.com/lxg/l10n-tools) which will scan your source code for translatable messages merge them into your dictionary. Of course, it will retain existing translations, so you will never again have to manually extract and merge your translations!
+The killer feature of this library however, is the `npx l10n` tool which will scan your source code for translatable messages merge them into your dictionary. Of course, it will retain existing translations, so you will never again have to manually extract and merge your translations!
 
 Under the hood, the library uses the [Gettext .po files](https://en.wikipedia.org/wiki/Gettext) as an intermediate format which you or your translators can edit. From those human-readable .po files, the actual size-optimised dictionaries are generated.
 
@@ -20,8 +20,7 @@ Under the hood, the library uses the [Gettext .po files](https://en.wikipedia.or
 This package is available via NPM:
 
 ```shell
-npm install --save @lxg/l10n
-npm install --save-dev @lxg/l10n-tools
+npm i @lxg/l10n
 ```
 
 ### 2. Import and Instantiate
@@ -104,13 +103,79 @@ This is of course just a very basic example. You may want to use a more sophisti
 
 ### 4. Extracting message strings and generating translation tables
 
-The [@lxg/l10n-tools library](https://github.com/lxg/l10n-tools) provides a set of tools to extract translatable string from your code base into `.po` files and, after the `.po` files have been translated, will generate a JSON translations table.
+The *catalog manager* is a CLI tool and has two tasks:
 
-The `npx l10n` tool is the CLI frontend to the catalog manager. Have a look at its  [documentation](https://github.com/lxg/l10n-tools)  to learn more.
+1. It extracts all translatable strings into a `.po` catalog.
+2. It compiles translation tables as lightweight JSON objects.
+
+The `npx l10n` tool is the CLI frontend to the catalog manager.
+
+### Setup
+
+Before you can start using the catalog manager, you must add some configuration to your project’s `package.json` file:
+
+```json
+{
+    "l10n": {
+        "directory": "l10n",
+        "instance": "l10n",
+        "locales": [
+            "de-DE",
+            "fr-FR"
+        ],
+        "sources": [
+            "main.js",
+            "other.js",
+            "src/*"
+        ],
+        "targets": {
+            "l10n/translations.json": [
+                "first.js",
+                "src/*"
+            ]
+        }
+    }
+}
+```
+
+The `directory` key specifies where the translations catalogs will be stored. It is optional and defaults to `l10n`.
+
+The `instance` key specifies the variable name of your instance of the `L10n` class. It is optional and defaults to `l10n`. It can also reflect a deeper structure suche as `this.l10n` or `some.object.l10n`.
+
+The `locales` key specifies the locales into which your package should be translated. The format for locales is: two lowercase letters for the language, followed by a hyphen (not an underscore!), followed by two uppercase letters for the region/country. NOTE: This tool assumes the `en-GB` locale as default, therefore you don’t need to add it.
+
+The `sources` key contains a list which specifies the files to be considered for the catalog. Each item in this list can either be a verbatim file name or a glob expression.
+
+The `targets` key is an object, where each entry is a target file for the JSON dictionary mapped to a list of sources. Each item in this list can either be a verbatim file name or a glob expression. By mapping the output target to a subset of the source files, we can build multiple translation dictionaries for different parts of your application, allowing smaller downloads e.g. in lazy-loading setups.
+
+### Extracting Message Strings
+
+You can now call `npx l10n --extract` to extract translatable messages in the `l10n.t`, `l10n.n`, `l10n.x` functions from your source files. This will generate one or more `.po` files in the location you provided as `directory` in your config. Note: The extractor will remove obsolete translations from the dictionary in order to avoid stuffing unneeded translations in the output table.
+
+After translating the strings in the `.po` files, you can generate the output table(s) with `npx l10n --compile`. This will create the JSON tables at the locations specified in your config. Important: Do *NOT* modify the JSON files directly! They will be overwritten next time you run the `npx l10n --compile` command.
+
+You can also combine the extract and compile commands by running `npx l10n --extract --compile`, or use the shorthand `npx l10n -ec`.
+
+### Workflow and Source Control
+
+Assuming you are using the configuration from the above example, the extractor will create or update the catalogs for German and French. Catalogs would be stored in the `./l10n` directory. So after running the command for the first time, you will find the new files `./l10n/de-DE.po` and `./l10n/fr-FR.po` in your project.
+
+The `*.po` files can be given to a human translator or be run through a translation tool which supports this format (there are lots of them). After the `.po` files have been updated, you can run `npx l10n` again, to create the translation dictionaries.
+
+All .po files and JSON dictionaries should be put under version control.
+
+### Non-JavaScript Sources
+
+This tool uses a JavaScript parser ([Acorn](https://github.com/acornjs/)) to find translatable strings in the source files. If you want to process TypeScript, TSX, JSX or other formats which cannot be processed by the parser, you must first generate the native JS code from them, and then reference the generated output as sources.
+
+## Using the Translation Tables
+
+After the .po files have been translated and the translation tables have been generated, you can use them in your code base.
+
 
 ### 5. Finally: Getting translated strings in your UI
 
-At this point you should have generated your JSON dictionary with the catalog manager. Assuming you have specified `./l10n/translations.json` as the dictionary file, you can now load it in your applcation and pass it to the translator.
+At this point you should have generated your JSON translation tables with the catalog manager. Assuming you have specified `./l10n/translations.json` as the translation file, you can now load it in your applcation and pass it to the translator.
 
 Loading the JSON can be a bit tricky, depending on the tools you have at hand. The easiest way is to use a bundler like Parcel or Rollup. It lets you import the JSON file synchronously, just like a JS file:
 
@@ -119,13 +184,13 @@ Loading the JSON can be a bit tricky, depending on the tools you have at hand. T
 import translations from "./l10n/translations.json"
 ```
 
-Now you can pass the dictionary to the `L10n` constructor as the first parameter:
+Now you can pass the translation table to the `L10n` constructor as the first parameter:
 
 ```js
 const l10n = new L10n(translations, "de-DE")
 ```
 
-NOTE: If other modules/classes also need translations, you can either pass the `l10n` instance to them, or load the library and the JSON dictionary there again. Keep in mind that the latter might increase the size of your build artifact.
+NOTE: If other modules/classes also need translations, you can either pass the `l10n` instance to them, or load the library and the JSON translation table there again. Keep in mind that the latter might increase the size of your build artifact.
 
 ## The `date.mjs` tool
 
