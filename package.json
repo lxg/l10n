@@ -5,7 +5,7 @@
     "type": "module",
     "main": "dist/l10n.mjs",
     "exports": {
-        ".": "dist/l10n.mjs",
+        ".": "./dist/l10n.mjs",
         "./date": "./dist/date.mjs"
     },
     "bin": {
