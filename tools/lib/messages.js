@@ -2,7 +2,7 @@ import * as fs from 'fs'
 import acorn from 'acorn-loose'
 import walk from 'acorn-walk'
 import fg from "fast-glob"
-import { getProjectRootDir } from "./helpers.mjs"
+import { getProjectRootDir } from "./helpers.js"
 
 /**
  * extracts translatable strings from JavaScript files

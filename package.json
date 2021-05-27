@@ -3,24 +3,24 @@
     "version": "2.0.3",
     "description": "A lightweight translation library",
     "type": "module",
-    "main": "dist/l10n.mjs",
+    "main": "dist/l10n.js",
     "exports": {
-        ".": "./dist/l10n.mjs",
-        "./date": "./dist/date.mjs"
+        ".": "./dist/l10n.js",
+        "./date": "./dist/date.js"
     },
     "bin": {
-        "l10n": "tools/generate.mjs"
+        "l10n": "tools/generate.js"
     },
     "scripts": {
-        "lint": "for script in $(ls *.mjs | grep -v test.mjs); do npx eslint $script; done",
-        "lint:fix": "for script in $(ls *.mjs | grep -v test.mjs); do npx eslint $script --fix; done",
+        "lint": "for script in $(ls *.js | grep -v test.js); do npx eslint $script; done",
+        "lint:fix": "for script in $(ls *.js | grep -v test.js); do npx eslint $script --fix; done",
         "test": "node --experimental-vm-modules node_modules/.bin/jest",
         "build": "npx rollup -c --environment BUILD:production"
     },
     "files": [
         "dist/*",
         "tools/*",
-        "!tools/cldr.mjs"
+        "!tools/cldr.js"
     ],
     "keywords": [
         "internationalisation",
@@ -60,11 +60,7 @@
     },
     "jest": {
         "testMatch": [
-            "**/tests/*.mjs"
-        ],
-        "moduleFileExtensions": [
-            "js",
-            "mjs"
+            "**/tests/*.js"
         ]
     }
 }

@@ -1,4 +1,4 @@
-import plurals from "./plurals.mjs"
+import plurals from "./plurals.js"
 import * as fs from 'fs'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'

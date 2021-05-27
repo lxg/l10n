@@ -6,7 +6,7 @@ The killer feature of this library however, is the `npx l10n` tool which will sc
 
 Under the hood, the library uses the [Gettext .po files](https://en.wikipedia.org/wiki/Gettext) as an intermediate format which you or your translators can edit. From those human-readable .po files, the actual size-optimised dictionaries are generated.
 
-- Super small footprint: only 660 bytes (yes, bytes!) minified, ~370 bytes compressed on the wire (only l10n.mjs, without date.mjs).
+- Super small footprint: only 660 bytes (yes, bytes!) minified, ~370 bytes compressed on the wire (only l10n.js, without date.js).
 - Support for on-the-fly locale switching.
 - Great pluralisation support, in almost all languages worldwide.
 - Support for message contexts (e.g. “amount” has different meanings, which translate to different words in other languages)
@@ -197,14 +197,14 @@ const l10n = new L10n(translations, "de-DE")
 
 NOTE: If other modules/classes also need translations, you can either pass the `l10n` instance to them, or load the library and the JSON translation table there again. Keep in mind that the latter might increase the size of your build artifact.
 
-## The `date.mjs` tool
+## The `date.js` tool
 
 If you’re working with dates, you will face two additional problems:
 
 1. You want the structure of the date expression to match the locale (e.g. `Y-m-d` in English and `d.m.Y` in German),
 2. You want month and weekday names to be translated *within* such an expression.
 
-This is solved by the `date.mjs` module.
+This is solved by the `date.js` module.
 
 Consider the following example, especially how the functions are arranged to produce the desired output:
 
@@ -223,7 +223,7 @@ const l10nDateFormat = new L10nDateFormat(l10n)
 sprintf(l10n.t("Today is %s."), l10nDate.fmt(new Date(2021, 3, 23), l10n.t("F j, Y")))
 ```
 
-The `date.mjs` module also provides a few functions to get translated month/weekday names:
+The `date.js` module also provides a few functions to get translated month/weekday names:
 
 - **`l10nDate.getMonths()`**: Returns a list of month names in the current locale: “January”, “February”, …
 - **`l10nDate.getMonthsShort()`**: Returns a list of short month names in the current locale: “Jan”, “Feb”, …

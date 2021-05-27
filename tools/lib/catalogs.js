@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 import gettextParser from "gettext-parser"
-import plurals from "./plurals.mjs"
+import plurals from "./plurals.js"
 
 export default function(dir, locales) {
     const catalogs = {}

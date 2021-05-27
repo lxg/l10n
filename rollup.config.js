@@ -1,9 +1,9 @@
 import { terser } from 'rollup-plugin-terser'
 
 export default ['l10n', 'date'].map(name => ({
-    input: `src/${name}.mjs`,
+    input: `src/${name}.js`,
     output: {
-        file: `dist/${name}.mjs`
+        file: `dist/${name}.js`
     },
     plugins: [terser({
         mangle: {

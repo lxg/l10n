@@ -4,11 +4,11 @@ import * as fs from 'fs'
 import { dirname } from 'path'
 import fg from "fast-glob"
 import gettextParser from "gettext-parser"
-import getCatalogs from "./lib/catalogs.mjs"
-import getMessages from "./lib/messages.mjs"
-import merge from "./lib/merge.mjs"
-import compile from "./lib/compile.mjs"
-import { getProjectRootDir, getConfig } from "./lib/helpers.mjs"
+import getCatalogs from "./lib/catalogs.js"
+import getMessages from "./lib/messages.js"
+import merge from "./lib/merge.js"
+import compile from "./lib/compile.js"
+import { getProjectRootDir, getConfig } from "./lib/helpers.js"
 import getopts from "getopts"
 
 
