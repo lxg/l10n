@@ -1,17 +1,10 @@
 import plurals from "./plurals.js"
-import * as fs from 'fs'
-import { dirname } from 'path'
-import { fileURLToPath } from 'url'
-
-const basedir = dirname(dirname(fileURLToPath(import.meta.url)))
+import { getLocaleData } from "@lxg/l10n-cldr"
 
 export default async function(sourceFiles, extras, catalogs) {
     const table = {}
 
     for (const locale of Object.keys(catalogs)) {
-        const lang = locale.substr(0, 2)
-        const country = locale.substr(3, 2)
-
         table[locale] = table[locale] || {
             p : plurals(locale, true),
             t : {}
@@ -36,28 +29,25 @@ export default async function(sourceFiles, extras, catalogs) {
 
         // adding extra translations (currently only month/day names)
         if (extras) {
-            let path = ""
+            const en = await getLocaleData("en")
+            const loc = await getLocaleData(locale)
 
-            if (fs.existsSync(`${basedir}/cldr/${locale}.json`)) {
-                path = `${basedir}/cldr/${locale}.json`
-            } else if (fs.existsSync(`${basedir}/cldr/${lang}.json`)) {
-                path = `${basedir}/cldr/${lang}.json`
-            }
+            extras.forEach(extra => {
+                const type = extra.replace(/^.*:/, "")
 
-            if (path) {
-                const dates = JSON.parse(fs.readFileSync(path))
 
-                extras.forEach(extra => {
-                    const type = extra.replace(/^.*:/, "")
+                if (type === "firstday") {
+                    table[locale].t["_\u00041"] = loc.firstday + ""
+                } else if (["days", "daysShort", "months", "monthsShort", "countries"].includes(type)) {
+                    const cldr = {}
 
-                    if (type === "firstday") {
-                        const firstdays = JSON.parse(fs.readFileSync(`${basedir}/cldr/_firstday.json`))
-                        table[locale].t["_\u00041"] = firstdays[country] || "1"
-                    } else if (["days", "daysShort", "months", "monthsShort"].includes(type)) {
-                        table[locale].t = {...table[locale].t, ...dates[type]}
-                    }
-                })
-            }
+                    Object.keys(en[type]).forEach(idx => {
+                        cldr[`_\x04${en[type][idx]}`] = loc[type][idx]
+                    })
+
+                    table[locale].t = {...table[locale].t, ...cldr}
+                }
+            })
         }
     }
 
