@@ -1,6 +1,6 @@
 {
     "parserOptions": {
-        "ecmaVersion": 6,
+        "ecmaVersion": 2020,
         "sourceType": "module",
         "ecmaFeatures": {}
     },
@@ -63,7 +63,7 @@
     },
     "env": {
         "browser": true,
-        "commonjs": true,
+        "node": true,
         "jest/globals": true
     },
     "plugins": ["jest"]
