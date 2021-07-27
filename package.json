@@ -15,7 +15,7 @@
         "lint": "for script in $(ls *.js | grep -v test.js); do npx eslint $script; done",
         "lint:fix": "for script in $(ls *.js | grep -v test.js); do npx eslint $script --fix; done",
         "test": "node --experimental-vm-modules node_modules/.bin/jest",
-        "build": "npx rollup -c --environment BUILD:production"
+        "build": "test -d dist && rm -rf dist; npx rollup -c --environment BUILD:production"
     },
     "files": [
         "dist/*",
