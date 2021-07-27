@@ -1,5 +1,3 @@
-// import L10n from "./l10n"
-
 export default class L10nDate
 {
     constructor(l10n) {
