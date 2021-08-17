@@ -14,7 +14,7 @@ export default async function(sourceFiles, extras, catalogs) {
             Object.keys(catalogs[locale].translations[context]).forEach(msgid => {
                 if (msgid) {
                     const entry = catalogs[locale].translations[context][msgid]
-                    const isContained = entry.locations.filter(location => sourceFiles.includes(location.file)).length;
+                    const isContained = entry.locations && entry.locations.filter(location => sourceFiles.includes(location.file)).length;
 
                     if (isContained) {
                         const prefix = entry.msgctxt ? `${entry.msgctxt}\u0004` : ""
