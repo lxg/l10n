@@ -62,7 +62,6 @@
         "node-html-parser": "^4.1.4"
     },
     "devDependencies": {
-        "@rollup/plugin-node-resolve": "^13.0.4",
         "cldr-core": "^38.1.0",
         "cldr-dates-modern": "^38.1.0",
         "eslint": "^7.26.0",

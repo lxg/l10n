@@ -1,10 +1,5 @@
 import { terser } from 'rollup-plugin-terser'
 
-
-// disabling resolve for now because of a broken dependency.
-// For our purposes, we can live with “external modules” for now.
-//import resolve from '@rollup/plugin-node-resolve'
-
 const builds = []
 
 ;['js', 'cjs'].map(type => {
@@ -15,7 +10,6 @@ const builds = []
                 file: `dist/${name}.${type}`
             },
             plugins : [
-                //resolve(),
                 terser({
                     mangle: {
                         properties : {
@@ -29,6 +23,7 @@ const builds = []
         if (type === "cjs") {
             config.output.format = "cjs"
             config.output.exports = "auto"
+            config.output.interop = "defaultOnly"
         }
 
         builds.push(config)

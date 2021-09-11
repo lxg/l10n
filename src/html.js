@@ -1,11 +1,11 @@
 // This is to be used as a filter: Input is HTML with <l10n:t> wrapper tags, output is translated text without the wrapper tags.
 
-import * as htmlparser from 'node-html-parser'
+import htmlparser from 'node-html-parser';
 import L10n from "./l10n.js"
 
 export default function(html, translations, locale) {
     const l10n = new L10n(translations, locale)
-    const root = htmlparser.default.parse(html)
+    const root = htmlparser.parse(html)
     const nodes = root.querySelectorAll('l10n\\:t, l10n\\:x, l10n\\:n')
 
     nodes.forEach(node => {
