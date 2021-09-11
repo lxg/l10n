@@ -19,8 +19,8 @@
         }
     },
     "bin": {
-        "l10n": "tools/generate.js",
-        "l10n-html": "tools/html.js"
+        "l10n": "cli/generate.js",
+        "l10n-html": "cli/html.js"
     },
     "scripts": {
         "lint": "for script in $(ls *.js | grep -v test.js); do npx eslint $script; done",
@@ -30,7 +30,7 @@
     },
     "files": [
         "dist/*",
-        "tools/*"
+        "cli/*"
     ],
     "keywords": [
         "internationalisation",
