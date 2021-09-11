@@ -3,6 +3,7 @@ import acorn from 'acorn-loose'
 import walk from 'acorn-walk'
 import fg from "fast-glob"
 import { getProjectRootDir } from "./helpers.js"
+import * as htmlparser from 'node-html-parser'
 
 /**
  * extracts translatable strings from JavaScript files
@@ -19,14 +20,43 @@ export default function(globs, instanceName) {
             const file = fs.readFileSync(fileName)
             const relName = fileName.replace(cwd, "")
 
-            entries.push(...getFileEntries(relName, file, instanceName))
+            // TODO: Right now, HTML files are a special case and will be "autodetected".
+            // Future versions will put this into dedicated files, maybe even allow pluggable extractors.
+            // The HTML feature is currently unofficial/undocumented, because it is experimental
+            // and might change significantly with upcoming versions.
+
+            if (fileName.endsWith(".html"))
+                entries.push(...getEntriesFromHtml(relName, file.toString(), instanceName))
+            else
+                entries.push(...getEntriesFromJs(relName, file, instanceName))
         })
     })
 
     return entries
 }
 
-function getFileEntries(fileName, file, instanceName) {
+function getEntriesFromHtml(fileName, file) {
+    const entries = []
+
+    const nodes = htmlparser.default.parse(file).querySelectorAll('l10n\\:t, l10n\\:x, l10n\\:n')
+
+    nodes.forEach(node => {
+        if (node.childNodes.length === 1 && node.childNodes[0].constructor.name === "TextNode") {
+            if (node.rawTagName === "l10n:t") {
+                entries.push({
+                    type: "t",
+                    message: [ node.childNodes[0]._rawText ],
+                    fileName,
+                    position: { line: 0 }
+                })
+            }
+        }
+    })
+
+    return entries
+}
+
+function getEntriesFromJs(fileName, file, instanceName) {
     const entries = []
     const ast = acorn.LooseParser.parse(file, { sourceType : "module", locations : true })
 

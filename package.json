@@ -12,10 +12,15 @@
         "./date": {
             "import": "./dist/date.js",
             "require": "./dist/date.cjs"
+        },
+        "./html": {
+            "import": "./dist/html.js",
+            "require": "./dist/html.cjs"
         }
     },
     "bin": {
-        "l10n": "tools/generate.js"
+        "l10n": "tools/generate.js",
+        "l10n-html": "tools/html.js"
     },
     "scripts": {
         "lint": "for script in $(ls *.js | grep -v test.js); do npx eslint $script; done",
@@ -53,7 +58,8 @@
         "ajv": "^6.12.6",
         "fast-glob": "^3.2.4",
         "getopts": "^2.3.0",
-        "gettext-parser": "^4.0.4"
+        "gettext-parser": "^4.0.4",
+        "node-html-parser": "^4.1.4"
     },
     "devDependencies": {
         "@rollup/plugin-node-resolve": "^13.0.4",
