@@ -2,7 +2,7 @@
 
 import * as fs from 'fs'
 import getopts from "getopts"
-import html from "../src/html.js"
+import html from "../dist/html.js"
 
 const options = getopts(process.argv.slice(2), {
   alias: {
