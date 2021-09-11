@@ -1,6 +1,6 @@
 export default class L10n {
 
-    constructor(translations, locale = navigator.language) {
+    constructor(translations, locale = "en") {
         this._catalogs = {}
         this._fallbacks = {}
         this.setLocale(locale)
