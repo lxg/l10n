@@ -5,8 +5,14 @@
     "type": "module",
     "main": "dist/l10n.js",
     "exports": {
-        ".": "./dist/l10n.js",
-        "./date": "./dist/date.js"
+        ".": {
+            "import": "./dist/l10n.js",
+            "require": "./dist/l10n.cjs"
+        },
+        "./date": {
+            "import": "./dist/date.js",
+            "require": "./dist/date.cjs"
+        }
     },
     "bin": {
         "l10n": "tools/generate.js"
@@ -50,6 +56,7 @@
         "gettext-parser": "^4.0.4"
     },
     "devDependencies": {
+        "@rollup/plugin-node-resolve": "^13.0.4",
         "cldr-core": "^38.1.0",
         "cldr-dates-modern": "^38.1.0",
         "eslint": "^7.26.0",
