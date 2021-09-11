@@ -19,8 +19,7 @@
     },
     "files": [
         "dist/*",
-        "tools/*",
-        "!tools/cldr.js"
+        "tools/*"
     ],
     "keywords": [
         "internationalisation",
