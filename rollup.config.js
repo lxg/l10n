@@ -11,11 +11,9 @@ const builds = []
             },
             plugins : [
                 terser({
-                    mangle: {
-                        properties : {
-                            regex: ['^_']
-                        }
-                    }
+                    mangle: (name === "html")
+                        ? {}
+                        : { properties : { regex: ['^_'] } }
                 })
             ]
         }
