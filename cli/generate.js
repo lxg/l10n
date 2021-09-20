@@ -64,6 +64,14 @@ Note: The file locations for extract/compile need to be configured in the packag
         // specified in the sourceGlobs, with all languages.
 
         ;(async() => {
+
+            // if no targets are defined, fall back to creating one joint output file.
+            if (!config.targets) {
+                config.targets = {
+                    [`${config.directory}/translations.json`]: config.sources
+                }
+            }
+
             for (const target of Object.keys(config.targets)) {
                 const sourceFiles = []
                 const extras = []
