@@ -1,6 +1,6 @@
 {
     "name": "@lxg/l10n",
-    "version": "2.2.3",
+    "version": "2.2.4",
     "description": "A lightweight translation library",
     "type": "module",
     "main": "dist/l10n.js",
