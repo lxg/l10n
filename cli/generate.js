@@ -64,32 +64,26 @@ Note: The file locations for extract/compile need to be configured in the packag
         // specified in the sourceGlobs, with all languages.
 
         ;(async() => {
+            if (config.targets) {
+                for (const target of Object.keys(config.targets)) {
+                    const sourceFiles = []
+                    const extras = []
 
-            // if no targets are defined, fall back to creating one joint output file.
-            if (!config.targets) {
-                config.targets = {
-                    [`${config.directory}/translations.json`]: config.sources
+                    config.targets[target].forEach(sourceGlob => {
+                        if (sourceGlob.startsWith("l10n:")) {
+                            extras.push(sourceGlob.replace(/^.*?:/, ""))
+                        } else {
+                            sourceFiles.push(...fg.sync(sourceGlob, { cwd : rootDir }))
+                        }
+                    })
+
+                    const table = await compile(sourceFiles, extras, catalogs)
+                    const targetFileName = `${rootDir}/${target}`
+                    const targetDir = dirname(targetFileName)
+
+                    fs.existsSync(targetDir) || fs.mkdirSync(targetDir, { recursive: true })
+                    fs.writeFileSync(targetFileName, JSON.stringify(table, null, 2))
                 }
-            }
-
-            for (const target of Object.keys(config.targets)) {
-                const sourceFiles = []
-                const extras = []
-
-                config.targets[target].forEach(sourceGlob => {
-                    if (sourceGlob.startsWith("l10n:")) {
-                        extras.push(sourceGlob.replace(/^.*?:/, ""))
-                    } else {
-                        sourceFiles.push(...fg.sync(sourceGlob, { cwd : rootDir }))
-                    }
-                })
-
-                const table = await compile(sourceFiles, extras, catalogs)
-                const targetFileName = `${rootDir}/${target}`
-                const targetDir = dirname(targetFileName)
-
-                fs.existsSync(targetDir) || fs.mkdirSync(targetDir, { recursive: true })
-                fs.writeFileSync(targetFileName, JSON.stringify(table, null, 2))
             }
         })()
     }
