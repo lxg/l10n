@@ -16,6 +16,9 @@
         "./html": {
             "import": "./dist/html.js",
             "require": "./dist/html.cjs"
+        },
+        "./lib": {
+            "import": "./lib/index.js"
         }
     },
     "bin": {

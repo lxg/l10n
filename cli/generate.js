@@ -2,13 +2,10 @@
 
 import * as fs from 'fs'
 import { dirname } from 'path'
-import fg from "fast-glob"
 import gettextParser from "gettext-parser"
-import getCatalogs from "./lib/catalogs.js"
-import getMessages from "./lib/messages.js"
-import merge from "./lib/merge.js"
-import compile from "./lib/compile.js"
-import { getProjectRootDir, getConfig } from "./lib/helpers.js"
+import { compileTranslations, getCatalogs, getProjectRootDir, getConfig, getMessages, mergeMessagesIntoCatalog } from "../lib/index.js"
+
+
 import getopts from "getopts"
 
 const options = getopts(process.argv.slice(2), {
@@ -48,13 +45,13 @@ Note: The file locations for extract/compile need to be configured in the packag
 
         // create new catalog from existing translations and current messages
         Object.keys(catalogs).forEach(locale => {
-            catalogs[locale] = merge(catalogs[locale], messages, locale)
+            catalogs[locale] = mergeMessagesIntoCatalog(catalogs[locale], messages, locale)
             fs.existsSync(l10nDir) || fs.mkdirSync(l10nDir, { recursive: true })
             fs.writeFileSync(
                 `${l10nDir}/${locale}.po`,
                 gettextParser.po.compile(catalogs[locale], {
                     foldLength : Number.MAX_SAFE_INTEGER  // setting very high value, because disabling folding causes headers to break
-                })
+                }) + "\n"
             )
         })
     }
@@ -66,18 +63,7 @@ Note: The file locations for extract/compile need to be configured in the packag
         ;(async() => {
             if (config.targets) {
                 for (const target of Object.keys(config.targets)) {
-                    const sourceFiles = []
-                    const extras = []
-
-                    config.targets[target].forEach(sourceGlob => {
-                        if (sourceGlob.startsWith("l10n:")) {
-                            extras.push(sourceGlob.replace(/^.*?:/, ""))
-                        } else {
-                            sourceFiles.push(...fg.sync(sourceGlob, { cwd : rootDir }))
-                        }
-                    })
-
-                    const table = await compile(sourceFiles, extras, catalogs)
+                    const table = await compileTranslations(catalogs, config.targets[target])
                     const targetFileName = `${rootDir}/${target}`
                     const targetDir = dirname(targetFileName)
 
