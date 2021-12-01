@@ -145,7 +145,7 @@ Before you can start using the catalog manager, you must add some configuration 
 
 The `directory` key specifies where the translations catalogs will be stored. It is optional and defaults to `l10n`.
 
-The `instance` key specifies the variable name of your instance of the `L10n` class. It is optional and defaults to `l10n`. It can also reflect a deeper structure suche as `this.l10n` or `some.object.l10n`.
+The `instance` key specifies the variable name of your instance of the `L10n` class. It is optional and defaults to `l10n`. It can also reflect a deeper structure suche as `this.l10n`, `some.object.l10n` or even multiple values like `["this.l10n", "some.object.l10n"]`.
 
 The `locales` key specifies the locales into which your package should be translated. The format for locales is: two lowercase letters for the language, followed by a hyphen (not an underscore!), followed by two uppercase letters for the region/country. NOTE: This tool assumes the `en-GB` locale as default, therefore you don’t need to add it.
 
