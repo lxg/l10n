@@ -8,6 +8,11 @@
             "items": {
                 "type": "string"
             }
+        },
+        "instance": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 100
         }
     },
 
@@ -19,9 +24,17 @@
             "maxLength": 100
         },
         "instance": {
-            "type": "string",
-            "minLength": 2,
-            "maxLength": 100
+            "oneOf": [
+                {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/_definitions/instance"
+                    }
+                },
+                {
+                    "$ref": "#/_definitions/instance"
+                }
+            ]
         },
         "locales": {
             "type": "array",
