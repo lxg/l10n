@@ -13,11 +13,6 @@ Under the hood, the library uses the [Gettext .po files](https://en.wikipedia.or
 - By using the original message as catalog ID, you always have an English fallback, where a translation doesn’t exist.
 - The `.po` catalog format is widely supported, so you will always find translators, tools and services which can work with your catalog files.
 
-## ATTENTION: If you’re upgrading from v1.x to v2.x
-
-- Please remove the `@lxg/l10n-tools` from your application. The l10n tools are now part of this package.
-- Please note that running `npx l10n` without any arguments will now do nothing. In order to restore the 1.x behaviour, you can use `npx l10n -ec` (i.e. extract and compile at the same time).
-
 ## Usage
 
 ### 1. Installation
@@ -65,8 +60,6 @@ Or how about JSX/TSX?
 ```jsx
 <span>{l10n.t("Also works with JSX!")}</span>
 ```
-
-(However, please read the notes on JSX, TSX and other non-JS source formats on the l10n-tools documentation.)
 
 #### Translation Functions
 
@@ -160,6 +153,8 @@ You can now call `npx l10n --extract` to extract translatable messages in the `l
 After translating the strings in the `.po` files, you can generate the output table(s) with `npx l10n --compile`. This will create the JSON tables at the locations specified in your config. Important: Do *NOT* modify the JSON files directly! They will be overwritten next time you run the `npx l10n --compile` command.
 
 You can also combine the extract and compile commands by running `npx l10n --extract --compile`, or use the shorthand `npx l10n -ec`.
+
+*PLEASE NOTE: The extraction tool cannot parse TSX/JSX or Typescript files. In these cases, you should first transpile the native JS code, and then reference the generated output as sources in your `package.json`.*
 
 ### Workflow and Source Control
 
