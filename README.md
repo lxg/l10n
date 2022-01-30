@@ -15,6 +15,21 @@ Under the hood, the library uses the [Gettext .po files](https://en.wikipedia.or
 
 ## Usage
 
+### 0. Quick Start
+
+For the impatient, or if you already have experience with the library, here are the main steps in a nutshell.
+
+- You need a bundler like [Rollup](https://rollupjs.org/) or Webpack in your project.
+- Install the library to your project with `npm i @lxg/l10n`.
+- Add the `l10n` config to your `package.json` and set the correct values (see below).
+- Run the extractor/compiler with `npx l10n -ec` to create the PO message catalogs and the translation tables.
+- Add the imports of the library and the `translations.json` to your code.
+- Create an instance of the `L10n` class and start wrapping your messages in the translation functions.
+- Run the extractor/compiler with `npx l10n -ec` as often as needed in order to update message catalogs and translation tables.
+- If you have a TSX/JSX/Typescript project, you need to get to run the extractor over your compiled output, because its parser only reads pure JavaScript at this point.
+
+In case you don’t know what these steps mean in detail, please read the detailled documentation below.
+
 ### 1. Installation
 
 This package is available via NPM:
