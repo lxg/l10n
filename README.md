@@ -13,6 +13,8 @@ Under the hood, the library uses the [Gettext .po files](https://en.wikipedia.or
 - By using the original message as catalog ID, you always have an English fallback, where a translation doesn’t exist.
 - The `.po` catalog format is widely supported, so you will always find translators, tools and services which can work with your catalog files.
 
+See the [`@lxg/l10n-demo`](https://github.com/lxg/l10n-demo) for an example of how this works in practice. You can also use that demo as a blueprint for your own project.
+
 ## Usage
 
 ### 0. Quick Start
