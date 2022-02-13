@@ -1,10 +1,8 @@
-# l10n – a versatile and super-lightweight localisation library
+# l10n – a powerful and super-lightweight localisation library
 
-With this library, you can build multilingual frontend application with very little overhead. It weights less than 1kB minified and compressed, and it has lots of nice features.
+With this library, you can build multilingual frontend application with very little overhead. It weights less than 1kB minified and compressed, and it has lots of nice features. At the same time, it comes with powerful build-time features, such as the translation extractor that will find all translatable messages in your code and add them to your translations file. No need to manually extract and merge your translations!
 
-The killer feature of this library however, is the `npx l10n` tool which will scan your source code for translatable messages merge them into your dictionary. Of course, it will retain existing translations, so you will never again have to manually extract and merge your translations!
-
-Under the hood, the library uses the [Gettext .po files](https://en.wikipedia.org/wiki/Gettext) as an intermediate format which you or your translators can edit. From those human-readable .po files, the actual size-optimised dictionaries are generated.
+Under the hood, the library uses the [Gettext .po files](https://en.wikipedia.org/wiki/Gettext) as an intermediate format which you or your translators can edit. From those human-readable PO files, the actual size-optimised dictionaries are generated.
 
 - Super small footprint: only adds 660 bytes to your build (yes, bytes!) minified, ~370 bytes compressed on the wire (only l10n.js; without date.js and translations).
 - Support for on-the-fly locale switching.
