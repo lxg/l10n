@@ -27,6 +27,7 @@ For the impatient, or if you already have experience with the library, here are 
 - Create an instance of the `L10n` class and start wrapping your messages in the translation functions.
 - Run the extractor/compiler with `npx l10n -ec` as often as needed in order to update message catalogs and translation tables.
 - If you have a TSX/JSX/Typescript project, you need to get to run the extractor over your compiled output, because its parser only reads pure JavaScript at this point.
+- You can also use this for HTML templates, using the `@lxg/l10n/html` module and with the `<l10n:t>`, `<l10n:n>` and `<l10n:x>` tags in your code.
 
 In case you don’t know what these steps mean in detail, please read the detailled documentation below.
 
@@ -207,7 +208,61 @@ const l10n = new L10n(translations, "de-DE")
 
 NOTE: If other modules/classes also need translations, you can either pass the `l10n` instance to them, or load the library and the JSON translation table there again. Keep in mind that the latter might increase the size of your build artifact.
 
-## The `date.js` tool
+## HTML Translations
+
+The library can also be used to translate strings in HTML, which works well with Static Site Generators. If you happen to use the Eleventy SSG, [there’s even a handy plugin available](https://github.com/lxg/eleventy-plugin-l10n).
+
+### Preparing Your Source Code
+
+First, you must register the files that should be considered by the HTML parser. This is done by using the extended format on the `l10n.source` field in your `package.json`. Assuming you have your JavaScript files in one folder and the HTML files in another one, it might look like this:
+
+```json
+{
+    "l10n": {
+        "sources": {
+            "html": "src/html/**/*",
+            "js": "src/js/**/*"
+        }
+    }
+}
+```
+
+Now you can start adding multilingual strings in your template code. The following examples show you how:
+
+```html
+<!-- Simple translations, equivalent to the L10n.t() function -->
+<l10n:t>It works!</l10n:t>
+
+<!-- Use placeholders by passing them as attributes, and then referencing them wrapped in % signs -->
+<l10n:t year=2022>© ACME Ltd. %year%. All rights reserved.</l10n:t>
+
+<!-- Plural-aware translations, equivalent to the L10n.n() function -->
+<!-- NOTE: You must use the #num attribute to allow us to pick the correct variant -->
+<l10n:n #num=4>
+    <l10n:singular>1 child</l10n:singular>
+    <l10n:plural>%#num% children</l10n:plural>
+</l10n:n>
+
+<!-- Context-aware translations, equivalent to the L10n.x() function -->
+<!-- NOTE: You must use the #context attribute to indicate the context -->
+<l10n:x #context=monetary>amount</l10n:x>
+<l10n:x #context=count>amount</l10n:x>
+```
+
+To extract messages to the catalog and to compile the translations table, you can use `npx l10n -ec` just as usual.
+
+Now you can use the `@lxg/l10n/html` module to generate translated output. See the following example:
+
+```js
+const l10nHtml = require("@lxg/l10n/html")
+const translations = require("./translations.json")
+const lang = "de-DE"
+const source = "<p><l10n:t>Hello World!</l10n:t></p>"
+const translated = l10nHtml(source, translations, lang)
+console.log(translated)
+```
+
+## The `date.js` Tool
 
 If you’re working with dates, you will face two additional problems:
 

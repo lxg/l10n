@@ -45,7 +45,19 @@
             }
         },
         "sources": {
-            "$ref": "#/_definitions/fileList"
+            "oneOf" : [
+                {
+                    "$ref": "#/_definitions/fileList"
+                },
+                {
+                    "type": "object",
+                    "patternProperties": {
+                        "^.*$": {
+                            "$ref": "#/_definitions/fileList"
+                        }
+                    }
+                }
+            ]
         },
         "targets": {
             "type": "object",
