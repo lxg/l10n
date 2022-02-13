@@ -1,4 +1,4 @@
-# l10n – a powerful and super-lightweight localisation library
+# l10n – a Powerful, Framwork-agnostic and Super-lightweight Localisation Library
 
 With this library, you can build multilingual frontend application with very little overhead. It weights less than 1kB minified and compressed, and it has lots of nice features. At the same time, it comes with powerful build-time features, such as the translation extractor that will find all translatable messages in your code and add them to your translations file. No need to manually extract and merge your translations!
 
@@ -115,7 +115,7 @@ sprintf(l10n.n("One apple", "%s apples", 4), 4)
 
 This is of course just a very basic example. You may want to use a more sophisticated implementation of `sprintf` (e.g. with support for positional parameters) in your project.
 
-### 4. Extracting message strings and generating translation tables
+### 4. Extracting Message Strings and Generating Translation Tables
 
 The *catalog manager* is a CLI tool and has two tasks:
 
@@ -158,7 +158,7 @@ The `instance` key specifies the variable name of your instance of the `L10n` cl
 
 The `locales` key specifies the locales into which your package should be translated. The format for locales is: two lowercase letters for the language, followed by a hyphen (not an underscore!), followed by two uppercase letters for the region/country. NOTE: This tool assumes the `en-GB` locale as default, therefore you don’t need to add it.
 
-The `sources` key contains a list which specifies the files to be considered for the catalog. Each item in this list can either be a verbatim file name or a glob expression.
+The `sources` key contains a list which specifies the files to be considered for the catalog. Each item in this list can either be a verbatim file name or a glob expression. If you’re using this library for HTML localisation as well, you must use the extended syntax, where `source` is a map of parsers to file globs. (See the chapter on [HTML localisation](#html-localisation) below)
 
 The `targets` key is an object, where each entry is a target file for the JSON dictionary mapped to a list of sources. Each item in this list can either be a verbatim file name or a glob expression. By mapping the output target to a subset of the source files, we can build multiple translation dictionaries for different parts of your application, allowing smaller downloads e.g. in lazy-loading setups.
 
@@ -186,10 +186,9 @@ This tool uses a JavaScript parser ([Acorn](https://github.com/acornjs/)) to fin
 
 ## Using the Translation Tables
 
-After the .po files have been translated and the translation tables have been generated, you can use them in your code base.
+After the PO files have been translated and the translation tables have been generated, you can use them in your code base.
 
-
-### 5. Finally: Getting translated strings in your UI
+### 5. Finally: Getting Translated Strings in Your UI
 
 At this point you should have generated your JSON translation tables with the catalog manager. Assuming you have specified `./l10n/translations.json` as the translation file, you can now load it in your applcation and pass it to the translator.
 
@@ -208,7 +207,7 @@ const l10n = new L10n(translations, "de-DE")
 
 NOTE: If other modules/classes also need translations, you can either pass the `l10n` instance to them, or load the library and the JSON translation table there again. Keep in mind that the latter might increase the size of your build artifact.
 
-## HTML Translations
+## HTML Localisation
 
 The library can also be used to translate strings in HTML, which works well with Static Site Generators. If you happen to use the Eleventy SSG, [there’s even a handy plugin available](https://github.com/lxg/eleventy-plugin-l10n).
 
