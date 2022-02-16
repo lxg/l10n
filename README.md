@@ -219,8 +219,12 @@ First, you must register the files that should be considered by the HTML parser.
 {
     "l10n": {
         "sources": {
-            "html": "src/html/**/*",
-            "js": "src/js/**/*"
+            "html": [
+                "src/html/**/*"
+            ],
+            "js": [
+                "src/js/**/*"
+            ]
         }
     }
 }
