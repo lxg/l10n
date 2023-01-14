@@ -130,7 +130,7 @@ Before you can start using the catalog manager, you must add some configuration 
 
 ```json
 {
-    "l10n": {
+    "@lxg/l10n": {
         "directory": "l10n",
         "instance": "l10n",
         "locales": [
@@ -213,11 +213,11 @@ The library can also be used to translate strings in HTML, which works well with
 
 ### Preparing Your Source Code
 
-First, you must register the files that should be considered by the HTML parser. This is done by using the extended format on the `l10n.source` field in your `package.json`. Assuming you have your JavaScript files in one folder and the HTML files in another one, it might look like this:
+First, you must register the files that should be considered by the HTML parser. This is done by using the extended format on the `source` field on our `package.json` configuration. Assuming you have your JavaScript files in one folder and the HTML files in another one, it might look like this:
 
 ```json
 {
-    "l10n": {
+    "@lxg/l10n": {
         "sources": {
             "html": [
                 "src/html/**/*"
@@ -277,36 +277,45 @@ This is solved by the `date.js` module.
 Consider the following example, especially how the functions are arranged to produce the desired output:
 
 ```js
-import L10n from "@lxg/l10n"
-import L10nDate, { L10nDateFormat }  from "@lxg/l10n/date"
-import from "@lxg/l10n/date"
-import translations from "./l10n/translations.json"
+const L10n = require('@lxg/l10n');
+const { L10nDateFormat } = require("@lxg/l10n/date")
+const translations = require('./l10n/translations.json');
 
 const l10n = new L10n(translations, "de-DE")
-const l10nDate = new L10nDate(l10n)
 const l10nDateFormat = new L10nDateFormat(l10n)
 
 // English: Today is April 23, 2021.
 // German: Heute ist der 23. April 2021.
-sprintf(l10n.t("Today is %s."), l10nDate.fmt(new Date(2021, 3, 23), l10n.t("F j, Y")))
+sprintf(l10n.t("Today is %s."), l10nDateFormat.fmt(new Date(2021, 3, 23), l10n.t("F j, Y")))
 ```
 
-The `date.js` module also provides a few functions to get translated month/weekday names:
+The `date.js` module also provides the `L10nDate` class to get translated month/weekday names directly:
 
-- **`l10nDate.getMonths()`**: Returns a list of month names in the current locale: “January”, “February”, …
-- **`l10nDate.getMonthsShort()`**: Returns a list of short month names in the current locale: “Jan”, “Feb”, …
-- **`l10nDate.getWeekdays()`**: Returns a list of weekday names in the current locale: “Monday”, “Tuesday”, …
-- **`l10nDate.getWeekdaysShort()`**: Returns a list of short weekday names in the current locale: “Mon”, “Tue”, …
-- **`l10nDate.getFirstDayOfWeek()`**: Returns the first day of the week, 0: Sunday, 1: Monday, 5: Friday, 6: Saturday
-- **`l10nDate.shiftWeekdays()`**: To be used together with one of the weekdays functions to get the localized order of days, e.g. `l10nDate.shiftWeekdays(l10nDate.getMonthsShort())`
+
+```js
+const L10n = require('@lxg/l10n');
+const L10nDate = require("@lxg/l10n/date")
+const translations = require('./l10n/translations.json');
+
+const l10n = new L10n(translations, "de-DE")
+const l10nDate = new L10nDate(l10n)
+
+l10nDate.getMonths() // Returns a list of month names in the current locale: “January”, “February”, …
+l10nDate.getMonthsShort() //  Returns a list of short month names in the current locale: “Jan”, “Feb”, …
+l10nDate.getWeekdays() //  Returns a list of weekday names in the current locale: “Monday”, “Tuesday”, …
+l10nDate.getWeekdaysShort() //  Returns a list of short weekday names in the current locale: “Mon”, “Tue”, …
+l10nDate.getFirstDayOfWeek() //  Returns the first day of the week, 0: Sunday, 1: Monday, 5: Friday, 6: Saturday
+l10nDate.shiftWeekdays() //  To be used together with one of the weekdays functions to get the localized order of days, e.g. `l10nDate.shiftWeekdays(l10nDate.getMonthsShort())
+```
+
 
 ### Config changes
 
-Translations of localised weekday/month names will be automatically added to your translations table, based on the locales you have configured. This is achieved by adding the `l10n:date:*` pseudo-paths to the config in your package.json file (make sure to only use the ones you need):
+Translations of localised weekday/month names will be automatically added to your translations table, based on the locales you have configured. This is achieved by adding the `l10n:date:*` pseudo-paths to the config in your package.json file:
 
 ```json
 {
-    "l10n": {
+    "@lxg/l10n": {
         "targets": {
             "l10n/translations.json": [
                 "src/*",
@@ -320,3 +329,5 @@ Translations of localised weekday/month names will be automatically added to you
     }
 }
 ```
+
+Make sure to only use the ones you need, because they add some weight, especially if you have multiple target languages.
