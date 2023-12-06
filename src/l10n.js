@@ -83,9 +83,11 @@ export default class L10n {
      * @return string the translated message, or, if there is no translation, the original message
      */
     n(msgid, msgidPlural, amount) {
-        const entry = this._getEntry(msgid)
-        return (entry && entry[0] && entry[1]) ? entry[_pl[this._language](amount)] : (amount === 1 ? msgid : msgidPlural)
-    }
+        const messageId = _pl[this._language](amount)? msgidPlural: msgid;
+        const entry = this._getEntry(messageId);
+     
+        return entry || messageId;        
+     }
 
     /*istanbul ignore next */
     _getEntry(msgid) {
